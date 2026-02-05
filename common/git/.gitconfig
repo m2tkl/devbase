@@ -1,0 +1,6 @@
+# devbase common git config
+[user]
+  name =
+  email =
+[core]
+  excludesfile = ~/.gitignore_global

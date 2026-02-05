@@ -1,0 +1,7 @@
+git
+zsh
+tmux
+lazygit
+gh
+fzf
+ripgrep

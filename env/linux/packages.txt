@@ -1,0 +1,9 @@
+build-essential
+git
+zsh
+tmux
+lazygit
+wl-clipboard
+gh
+fzf
+ripgrep

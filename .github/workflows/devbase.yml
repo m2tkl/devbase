@@ -1,0 +1,17 @@
+name: devbase
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run devbase (linux)
+        env:
+          DEVBASE_SKIP_CHSH: "1"
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          ./devbase.sh linux
