@@ -15,21 +15,28 @@ devbase is my minimal developer machine baseline.
 This repository assumes **Git is already available**.
 
 macOS:
+
 ```sh
 xcode-select --install
 ```
 
 Linux (Debian/Ubuntu):
+
 ```sh
 sudo apt update
 sudo apt install -y git
 ```
+
+## Shell Policy (macOS)
+
+macOS uses the system `/bin/zsh` by default. This repo does not change the login shell on macOS.
 
 ## Bootstrap (Optional: curl)
 
 If Git is not available, you can download a zip and run it.
 
 macOS:
+
 ```sh
 curl -L -o devbase.zip https://github.com/m2tkl/devbase/archive/refs/heads/main.zip
 unzip devbase.zip
@@ -38,6 +45,7 @@ cd devbase-main
 ```
 
 Linux:
+
 ```sh
 curl -L -o devbase.zip https://github.com/m2tkl/devbase/archive/refs/heads/main.zip
 unzip devbase.zip

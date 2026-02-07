@@ -44,14 +44,14 @@ elif [ -x /usr/local/bin/brew ]; then
 fi
 
 echo "Installing packages..."
-while read -r pkg; do
+while read -r pkg || [ -n "$pkg" ]; do
   [[ -z "$pkg" ]] && continue
   [[ "$pkg" =~ ^[[:space:]]*# ]] && continue
 
   if [[ "$pkg" == cask:* ]]; then
-    run brew install --cask "${pkg#cask:}"
+    run brew install --cask "${pkg#cask:}" </dev/null
   else
-    run brew install "$pkg"
+    run brew install "$pkg" </dev/null
   fi
 done < "$DIR/packages.txt"
 
@@ -78,12 +78,7 @@ if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 fi
 
 echo "Setting default shell to zsh..."
-zsh_path="$(command -v zsh || true)"
-if should_skip_chsh; then
-  echo "Skipping chsh (CI or DEVBASE_SKIP_CHSH=1)."
-elif [ -n "$zsh_path" ] && [ "${SHELL:-}" != "$zsh_path" ]; then
-  run chsh -s "$zsh_path"
-fi
+echo "Skipping chsh on macOS (use the system /bin/zsh)."
 
 echo "Applying macOS settings..."
 bash "$DIR/settings/defaults.sh"
