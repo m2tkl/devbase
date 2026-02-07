@@ -1,6 +1,17 @@
 # devbase common git config
 [user]
-  name =
-  email =
+  name = m2tkl
+  email = 37099863+m2tkl@users.noreply.github.com
 [core]
   excludesfile = ~/.gitignore_global
+  autocrlf = false
+  editor = vim
+  quotepath = false
+[color]
+  ui = true
+[merge]
+  ff = false
+[pull]
+  ff = only
+[init]
+  defaultBranch = main
