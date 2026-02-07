@@ -56,3 +56,15 @@ echo "Installing base packages for: $ENV_NAME"
 bash "$ENV_DIR/install.sh"
 
 echo "devbase applied."
+
+if [ "${DEVBASE_RELOAD_SHELL:-0}" -eq 1 ] && [ -t 1 ]; then
+  exec "${SHELL:-/bin/sh}" -l
+else
+  if [ -f "$HOME/.zprofile" ]; then
+    echo "To reload your shell: source ~/.zprofile"
+  elif [ -f "$HOME/.bashrc" ]; then
+    echo "To reload your shell: source ~/.bashrc"
+  else
+    echo "To reload your shell: exec ${SHELL:-/bin/sh} -l"
+  fi
+fi
