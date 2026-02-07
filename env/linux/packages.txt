@@ -4,6 +4,7 @@ zsh
 tmux
 lazygit
 wl-clipboard
+peco
 gh
 fzf
 ripgrep
