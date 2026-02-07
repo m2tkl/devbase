@@ -36,6 +36,13 @@ if ! command -v brew >/dev/null; then
   fi
 fi
 
+# Ensure brew is available in this shell session
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
 echo "Installing packages..."
 while read -r pkg; do
   [[ -z "$pkg" ]] && continue

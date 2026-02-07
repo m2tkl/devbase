@@ -70,10 +70,12 @@ if [ "$STATUS_ONLY" -eq 1 ]; then
   status_file "$COMMON_DIR/shell/.zshrc" "$HOME/.zshrc"
   status_file "$COMMON_DIR/shell/.bashrc" "$HOME/.bashrc"
   status_file "$COMMON_DIR/shell/.zpreztorc" "$HOME/.zpreztorc"
+  status_file "$COMMON_DIR/shell/.zprofile" "$HOME/.zprofile"
 else
   link_file "$COMMON_DIR/shell/.zshrc" "$HOME/.zshrc"
   link_file "$COMMON_DIR/shell/.bashrc" "$HOME/.bashrc"
   link_file "$COMMON_DIR/shell/.zpreztorc" "$HOME/.zpreztorc"
+  link_file "$COMMON_DIR/shell/.zprofile" "$HOME/.zprofile"
 fi
 
 # VSCode
