@@ -1,68 +1,93 @@
 # devbase
 
-devbase is my minimal developer machine baseline.
+devbase is my developer machine baseline managed with Nix and Home Manager.
 
-- Common configuration files
-- Essential packages for each OS
+## What Is Managed
+
+- `zsh`
+- `tmux`
+- `vim`
+- common dotfiles such as Git and VS Code settings
+- base CLI packages such as `gh`, `ghq`, `lazygit`, `fzf`, `ripgrep`, `peco`
+
+## Prerequisites
+
+- Nix is installed
+- Git is available
 
 ## Usage
 
-./devbase.sh mac
-./devbase.sh linux
-
-## Prerequisite: Git
-
-This repository assumes **Git is already available**.
+Apply the current machine profile directly with Home Manager.
 
 macOS:
 
 ```sh
-xcode-select --install
-```
-
-Linux (Debian/Ubuntu):
-
-```sh
-sudo apt update
-sudo apt install -y git
-```
-
-## Shell Policy (macOS)
-
-macOS uses the system `/bin/zsh` by default. This repo does not change the login shell on macOS.
-
-## Bootstrap (Optional: curl)
-
-If Git is not available, you can download a zip and run it.
-
-macOS:
-
-```sh
-curl -L -o devbase.zip https://github.com/m2tkl/devbase/archive/refs/heads/main.zip
-unzip devbase.zip
-cd devbase-main
-./devbase.sh mac
+home-manager -b backup --flake .#m2tkl-darwin switch
 ```
 
 Linux:
 
 ```sh
-curl -L -o devbase.zip https://github.com/m2tkl/devbase/archive/refs/heads/main.zip
-unzip devbase.zip
-cd devbase-main
-./devbase.sh linux
+home-manager -b backup --flake .#m2tkl-linux switch
 ```
 
-## Dry Run
+If `home-manager` is not installed globally, use `nix run`:
 
-./devbase.sh --dry-run mac
-./devbase.sh --dry-run linux
+```sh
+nix run github:nix-community/home-manager -- -b backup --flake .#m2tkl-darwin switch
+```
 
-## Status
+Build without activating:
 
-./devbase.sh --status mac
-./devbase.sh --status linux
+```sh
+home-manager --flake .#m2tkl-darwin build
+home-manager --flake .#m2tkl-linux build
+```
 
-## Docker (Linux)
+Dry run:
 
-./scripts/docker_linux.sh
+```sh
+home-manager -n --flake .#m2tkl-darwin build
+```
+
+## Structure
+
+- `flake.nix`: flake entrypoint
+- `home/common.nix`: shared Home Manager module
+- `home/darwin.nix`: macOS-specific additions
+- `home/linux.nix`: Linux-specific additions
+
+## Git Configuration
+
+Common Git settings are managed by Home Manager via `programs.git`.
+
+- Repo-managed:
+  - default branch
+  - editor
+  - pull/merge policy
+  - shared include/excludes settings
+- Local-only:
+  - `user.name`
+  - `user.email`
+  - credential helpers
+  - company-specific settings
+
+On first activation, devbase creates:
+
+```sh
+~/.config/devbase/git/local.gitconfig
+```
+
+from:
+
+```sh
+common/git/local.gitconfig.example
+```
+
+Edit the local file on each machine as needed. It is intentionally not managed after creation.
+
+## Notes
+
+- `tmux` plugins are managed by Nix. TPM is no longer used.
+- `vim` plugins are managed by Nix. `vim-plug` is no longer used.
+- `zsh` no longer depends on Prezto.

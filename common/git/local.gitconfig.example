@@ -1,0 +1,15 @@
+# Local Git settings for this machine.
+# This file is intentionally not managed by Home Manager after creation.
+#
+# Fill in the values you need, for example:
+#
+# [user]
+#   name = Your Name
+#   email = you@example.com
+#
+# [credential]
+#   helper =
+#   helper = /usr/local/share/gcm-core/git-credential-manager
+#
+# [credential "https://dev.azure.com"]
+#   useHttpPath = true

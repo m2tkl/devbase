@@ -1,9 +1,0 @@
-git
-zsh
-tmux
-lazygit
-ghq
-peco
-gh
-fzf
-ripgrep
