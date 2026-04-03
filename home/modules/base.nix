@@ -14,6 +14,7 @@ in
     ghq
     lazygit
     peco
+    pnpm
     pure-prompt
     ripgrep
     fzf
