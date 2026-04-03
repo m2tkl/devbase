@@ -22,32 +22,32 @@ Apply the current machine profile directly with Home Manager.
 macOS:
 
 ```sh
-home-manager -b backup --flake .#m2tkl-darwin switch
+home-manager --impure -b backup --flake .#darwin switch
 ```
 
 Linux:
 
 ```sh
-home-manager -b backup --flake .#m2tkl-linux switch
+home-manager --impure -b backup --flake .#linux switch
 ```
 
 If `home-manager` is not installed globally, use `nix run`:
 
 ```sh
-nix run github:nix-community/home-manager -- -b backup --flake .#m2tkl-darwin switch
+nix run github:nix-community/home-manager -- --impure -b backup --flake github:m2tkl/devbase#darwin switch
 ```
 
 Build without activating:
 
 ```sh
-home-manager --flake .#m2tkl-darwin build
-home-manager --flake .#m2tkl-linux build
+home-manager --impure --flake .#darwin build
+home-manager --impure --flake .#linux build
 ```
 
 Dry run:
 
 ```sh
-home-manager -n --flake .#m2tkl-darwin build
+home-manager --impure -n --flake .#darwin build
 ```
 
 ## Structure

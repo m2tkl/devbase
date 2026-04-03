@@ -11,6 +11,11 @@
 
   outputs = { home-manager, nixpkgs, ... }:
     let
+      envOr =
+        name: fallback:
+        let value = builtins.getEnv name;
+        in if value != "" then value else fallback;
+
       mkHome = { system, username, homeDirectory, stateVersion }:
         home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
@@ -34,6 +39,20 @@
         };
     in {
       homeConfigurations = {
+        "darwin" = mkHome {
+          system = "aarch64-darwin";
+          username = envOr "USER" "m2tkl";
+          homeDirectory = envOr "HOME" "/Users/m2tkl";
+          stateVersion = "25.05";
+        };
+
+        "linux" = mkHome {
+          system = "x86_64-linux";
+          username = envOr "USER" "m2tkl";
+          homeDirectory = envOr "HOME" "/home/m2tkl";
+          stateVersion = "25.05";
+        };
+
         "m2tkl-darwin" = mkHome {
           system = "aarch64-darwin";
           username = "m2tkl";
