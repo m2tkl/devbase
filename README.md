@@ -23,6 +23,12 @@ After the first install, apply the current machine profile with:
 devbase-config switch --backup
 ```
 
+Update the local devbase checkout:
+
+```sh
+devbase-config pull
+```
+
 Build without activating:
 
 ```sh

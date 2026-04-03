@@ -49,6 +49,8 @@ func run(args []string) error {
 	switch args[0] {
 	case "list":
 		return cmdList()
+	case "pull":
+		return pullRepo()
 	case "switch":
 		return runHomeManager("switch", args[1:])
 	case "build":
@@ -94,6 +96,7 @@ func run(args []string) error {
 func printUsage() {
 	fmt.Println(`Usage:
   devbase-config list
+  devbase-config pull
   devbase-config switch [--backup]
   devbase-config build
   devbase-config path <target>
@@ -245,6 +248,19 @@ func applyVSCode(backup bool) error {
 	}
 
 	return nil
+}
+
+func pullRepo() error {
+	root, err := repoRoot()
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command("git", "-C", root, "pull", "--ff-only")
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 func runHomeManager(action string, args []string) error {
