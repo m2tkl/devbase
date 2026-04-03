@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -238,17 +240,265 @@ func applyVSCode(backup bool) error {
 				return err
 			}
 		}
-		data, err := os.ReadFile(src)
+		data, err := mergeVSCodeFile(file, src, dst)
 		if err != nil {
 			return err
 		}
 		if err := os.WriteFile(dst, data, 0o644); err != nil {
 			return err
 		}
-		fmt.Printf("Installed: %s\n", dst)
+		fmt.Printf("Updated: %s\n", dst)
 	}
 
 	return nil
+}
+
+func mergeVSCodeFile(name, src, dst string) ([]byte, error) {
+	baseData, err := os.ReadFile(src)
+	if err != nil {
+		return nil, err
+	}
+
+	localData, err := os.ReadFile(dst)
+	if errors.Is(err, os.ErrNotExist) {
+		return formatJSONC(baseData)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	switch name {
+	case "settings.json":
+		return mergeVSCodeSettings(baseData, localData)
+	case "keybindings.json":
+		return mergeVSCodeKeybindings(baseData, localData)
+	default:
+		return nil, fmt.Errorf("unsupported VS Code file: %s", name)
+	}
+}
+
+func mergeVSCodeSettings(baseData, localData []byte) ([]byte, error) {
+	baseValue, err := parseJSONC(baseData)
+	if err != nil {
+		return nil, fmt.Errorf("parse base settings.json: %w", err)
+	}
+	localValue, err := parseJSONC(localData)
+	if err != nil {
+		return nil, fmt.Errorf("parse local settings.json: %w", err)
+	}
+
+	baseObject, ok := baseValue.(map[string]any)
+	if !ok {
+		return nil, errors.New("base settings.json must be a JSON object")
+	}
+	localObject, ok := localValue.(map[string]any)
+	if !ok {
+		return nil, errors.New("local settings.json must be a JSON object")
+	}
+
+	merged := mergeJSONObject(baseObject, localObject)
+	return marshalIndentedJSON(merged)
+}
+
+func mergeVSCodeKeybindings(baseData, localData []byte) ([]byte, error) {
+	baseValue, err := parseJSONC(baseData)
+	if err != nil {
+		return nil, fmt.Errorf("parse base keybindings.json: %w", err)
+	}
+	localValue, err := parseJSONC(localData)
+	if err != nil {
+		return nil, fmt.Errorf("parse local keybindings.json: %w", err)
+	}
+
+	baseBindings, ok := baseValue.([]any)
+	if !ok {
+		return nil, errors.New("base keybindings.json must be a JSON array")
+	}
+	localBindings, ok := localValue.([]any)
+	if !ok {
+		return nil, errors.New("local keybindings.json must be a JSON array")
+	}
+
+	merged := append([]any(nil), baseBindings...)
+	indexByIdentity := map[string]int{}
+	for i, binding := range merged {
+		indexByIdentity[keybindingIdentity(binding)] = i
+	}
+	for _, binding := range localBindings {
+		identity := keybindingIdentity(binding)
+		if idx, ok := indexByIdentity[identity]; ok {
+			merged[idx] = binding
+			continue
+		}
+		indexByIdentity[identity] = len(merged)
+		merged = append(merged, binding)
+	}
+
+	return marshalIndentedJSON(merged)
+}
+
+func mergeJSONObject(base, local map[string]any) map[string]any {
+	merged := make(map[string]any, len(base)+len(local))
+	for key, value := range base {
+		merged[key] = value
+	}
+	for key, localValue := range local {
+		if baseValue, ok := merged[key]; ok {
+			baseObject, baseOK := baseValue.(map[string]any)
+			localObject, localOK := localValue.(map[string]any)
+			if baseOK && localOK {
+				merged[key] = mergeJSONObject(baseObject, localObject)
+				continue
+			}
+		}
+		merged[key] = localValue
+	}
+	return merged
+}
+
+func keybindingIdentity(binding any) string {
+	if object, ok := binding.(map[string]any); ok {
+		key, _ := object["key"].(string)
+		when, _ := object["when"].(string)
+		if key != "" {
+			return "key:" + key + "|when:" + when
+		}
+	}
+
+	data, err := json.Marshal(binding)
+	if err != nil {
+		return fmt.Sprintf("%#v", binding)
+	}
+	return string(data)
+}
+
+func formatJSONC(data []byte) ([]byte, error) {
+	value, err := parseJSONC(data)
+	if err != nil {
+		return nil, err
+	}
+	return marshalIndentedJSON(value)
+}
+
+func parseJSONC(data []byte) (any, error) {
+	normalized := stripTrailingCommas(stripJSONComments(data))
+	var value any
+	if err := json.Unmarshal(normalized, &value); err != nil {
+		return nil, err
+	}
+	return value, nil
+}
+
+func marshalIndentedJSON(value any) ([]byte, error) {
+	data, err := json.MarshalIndent(value, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+	return append(data, '\n'), nil
+}
+
+func stripJSONComments(data []byte) []byte {
+	var out bytes.Buffer
+	inString := false
+	escaped := false
+
+	for i := 0; i < len(data); i++ {
+		ch := data[i]
+		if inString {
+			out.WriteByte(ch)
+			if escaped {
+				escaped = false
+				continue
+			}
+			if ch == '\\' {
+				escaped = true
+				continue
+			}
+			if ch == '"' {
+				inString = false
+			}
+			continue
+		}
+
+		if ch == '"' {
+			inString = true
+			out.WriteByte(ch)
+			continue
+		}
+
+		if ch == '/' && i+1 < len(data) {
+			next := data[i+1]
+			if next == '/' {
+				for i < len(data) && data[i] != '\n' {
+					i++
+				}
+				if i < len(data) {
+					out.WriteByte(data[i])
+				}
+				continue
+			}
+			if next == '*' {
+				i += 2
+				for i < len(data)-1 {
+					if data[i] == '*' && data[i+1] == '/' {
+						i++
+						break
+					}
+					i++
+				}
+				continue
+			}
+		}
+
+		out.WriteByte(ch)
+	}
+
+	return out.Bytes()
+}
+
+func stripTrailingCommas(data []byte) []byte {
+	var out bytes.Buffer
+	inString := false
+	escaped := false
+
+	for i := 0; i < len(data); i++ {
+		ch := data[i]
+		if inString {
+			out.WriteByte(ch)
+			if escaped {
+				escaped = false
+				continue
+			}
+			if ch == '\\' {
+				escaped = true
+				continue
+			}
+			if ch == '"' {
+				inString = false
+			}
+			continue
+		}
+
+		if ch == '"' {
+			inString = true
+			out.WriteByte(ch)
+			continue
+		}
+
+		if ch == ',' {
+			j := i + 1
+			for j < len(data) && (data[j] == ' ' || data[j] == '\n' || data[j] == '\r' || data[j] == '\t') {
+				j++
+			}
+			if j < len(data) && (data[j] == '}' || data[j] == ']') {
+				continue
+			}
+		}
+
+		out.WriteByte(ch)
+	}
+
+	return out.Bytes()
 }
 
 func pullRepo() error {

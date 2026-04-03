@@ -188,13 +188,18 @@ Target location:
 - Linux: `~/.config/Code/User`
 - WSL: Windows-side `%APPDATA%/Code/User`
 
-To overwrite the current machine's VS Code config from the repo, run:
+To merge the repo base config into the current machine's VS Code config, run:
 
 ```sh
 devbase-config apply vscode
 ```
 
-To keep a backup of the current files before overwriting:
+Merge behavior:
+
+- `settings.json`: deep merge, local values win on conflicts
+- `keybindings.json`: base bindings are kept, and local bindings override the same `key + when`
+
+To keep a backup of the current files before writing the merged result:
 
 ```sh
 devbase-config apply vscode --backup
