@@ -17,18 +17,22 @@ devbase is my developer machine baseline managed with Nix and Home Manager.
 
 ## Usage
 
-Apply the current machine profile directly with Home Manager.
-
-macOS:
+After the first install, apply the current machine profile with:
 
 ```sh
-home-manager --impure -b backup --flake .#darwin switch
+devbase-config switch --backup
 ```
 
-Linux:
+Build without activating:
 
 ```sh
-home-manager --impure -b backup --flake .#linux switch
+devbase-config build
+```
+
+Dry run:
+
+```sh
+devbase-config switch --backup --dry-run
 ```
 
 Linux note:
@@ -41,23 +45,27 @@ sudo apt install zsh
 chsh -s /usr/bin/zsh
 ```
 
-If `home-manager` is not installed globally, use `nix run`:
+For the first bootstrap on a new machine, run the CLI directly from GitHub:
 
 ```sh
-nix run github:nix-community/home-manager -- --impure -b backup --flake github:m2tkl/devbase#darwin switch
+nix run github:m2tkl/devbase#devbase-config -- switch --backup
 ```
 
-Build without activating:
+## Editing Config
+
+Use the helper CLI to edit common and local config files:
 
 ```sh
-home-manager --impure --flake .#darwin build
-home-manager --impure --flake .#linux build
+devbase-config list
+devbase-config edit git-local
+devbase-config edit shell-local
+devbase-config edit tmux
 ```
 
-Dry run:
+For VS Code base config deployment:
 
 ```sh
-home-manager --impure -n --flake .#darwin build
+devbase-config apply vscode --backup
 ```
 
 ## Structure
@@ -156,13 +164,13 @@ Target location:
 To overwrite the current machine's VS Code config from the repo, run:
 
 ```sh
-bash scripts/apply_vscode_config.sh
+devbase-config apply vscode
 ```
 
 To keep a backup of the current files before overwriting:
 
 ```sh
-bash scripts/apply_vscode_config.sh --backup
+devbase-config apply vscode --backup
 ```
 
 ## Notes

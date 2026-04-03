@@ -9,19 +9,39 @@
     };
   };
 
-  outputs = { home-manager, nixpkgs, ... }:
+  outputs = { self, home-manager, nixpkgs, ... }:
     let
       envOr =
         name: fallback:
         let value = builtins.getEnv name;
         in if value != "" then value else fallback;
 
+      mkPkgs = system: import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
+      mkDevbaseConfig = system:
+        let
+          pkgs = mkPkgs system;
+          src = ./.;
+        in
+        pkgs.buildGoModule {
+          pname = "devbase-config";
+          version = "0.1.0";
+          inherit src;
+          modRoot = ".";
+          subPackages = [ "cmd/devbase-config" ];
+          vendorHash = null;
+          ldflags = [
+            "-X"
+            "main.nixSourceRoot=${src}"
+          ];
+        };
+
       mkHome = { system, username, homeDirectory, stateVersion }:
         home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
+          pkgs = mkPkgs system;
           extraSpecialArgs = {
             inherit username homeDirectory;
           };
@@ -31,6 +51,7 @@
               home = {
                 inherit username homeDirectory stateVersion;
               };
+              home.packages = [ self.packages.${system}.devbase-config ];
             }
             (if system == "aarch64-darwin" || system == "x86_64-darwin"
              then ./home/darwin.nix
@@ -38,6 +59,11 @@
           ];
         };
     in {
+      packages = {
+        aarch64-darwin.devbase-config = mkDevbaseConfig "aarch64-darwin";
+        x86_64-linux.devbase-config = mkDevbaseConfig "x86_64-linux";
+      };
+
       homeConfigurations = {
         "darwin" = mkHome {
           system = "aarch64-darwin";
