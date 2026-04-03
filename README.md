@@ -17,6 +17,37 @@ devbase is my developer machine baseline managed with Nix and Home Manager.
 
 ## Usage
 
+### Bootstrap
+
+If direct GitHub flake access works in your network environment, bootstrap with:
+
+```sh
+nix run github:m2tkl/devbase#devbase-config -- switch --backup
+```
+
+If `github:m2tkl/devbase` is blocked, a local checkout can still be useful once your environment is able to access the required flake inputs:
+
+```sh
+git clone https://github.com/m2tkl/devbase.git
+cd devbase
+nix run github:nix-community/home-manager -- --impure -b backup --flake .#darwin switch
+```
+
+Linux:
+
+```sh
+git clone https://github.com/m2tkl/devbase.git
+cd devbase
+nix run github:nix-community/home-manager -- --impure -b backup --flake .#linux switch
+```
+
+Note:
+
+- In some corporate proxy environments, `nix run github:...` may fail because Nix accesses `api.github.com` directly.
+- In that case, fix the proxy or certificate path seen by Nix first. A clone alone does not remove the need to fetch flake inputs.
+
+### Daily Use
+
 After the first install, apply the current machine profile with:
 
 ```sh
@@ -35,13 +66,7 @@ Build without activating:
 devbase-config build
 ```
 
-Dry run:
-
-```sh
-devbase-config switch --backup --dry-run
-```
-
-Linux note:
+### Linux Notes
 
 `zsh` settings are managed by Home Manager, but the login shell is not changed automatically.
 If you want to use `zsh` as your login shell on Ubuntu, install a system `zsh` and change it explicitly:
@@ -51,11 +76,7 @@ sudo apt install zsh
 chsh -s /usr/bin/zsh
 ```
 
-For the first bootstrap on a new machine, run the CLI directly from GitHub:
-
-```sh
-nix run github:m2tkl/devbase#devbase-config -- switch --backup
-```
+If your environment relies on `/etc/profile.d/*.sh` for proxy settings, re-login after switching to `zsh` so `/etc/profile` is loaded through `config/shell/.zprofile`.
 
 ## Editing Config
 
