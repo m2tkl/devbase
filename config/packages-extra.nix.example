@@ -1,0 +1,6 @@
+{ pkgs }:
+with pkgs; [
+  # Add machine-specific packages here, for example:
+  # azure-cli
+  # kubectl
+]

@@ -96,6 +96,32 @@ config/git/local.gitconfig.example
 
 Edit the local file on each machine as needed. It is intentionally not managed after creation.
 
+## Extra Packages
+
+Machine-specific packages can be added in:
+
+```sh
+~/.config/devbase/packages-extra.nix
+```
+
+On first activation, devbase creates it from:
+
+```sh
+config/packages-extra.nix.example
+```
+
+Expected format:
+
+```nix
+{ pkgs }:
+with pkgs; [
+  # azure-cli
+  # kubectl
+]
+```
+
+These packages are added to `home.packages` only on the current machine.
+
 ## VS Code Configuration
 
 VS Code is not managed by Nix.
