@@ -81,7 +81,7 @@ On first activation, devbase creates:
 from:
 
 ```sh
-common/git/local.gitconfig.example
+config/git/local.gitconfig.example
 ```
 
 Edit the local file on each machine as needed. It is intentionally not managed after creation.

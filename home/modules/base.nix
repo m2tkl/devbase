@@ -17,5 +17,5 @@
   ];
 
   xdg.configFile."Code/User/settings.json".source =
-    ../../common/editor/vscode/settings.json;
+    ../../config/editor/vscode/settings.json;
 }

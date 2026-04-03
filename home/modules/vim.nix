@@ -18,9 +18,9 @@
       ctrlp-vim
     ];
     extraConfig = ''
-      ${builtins.readFile ../../common/vim/.vimrc}
+      ${builtins.readFile ../../config/vim/.vimrc}
 
-      ${builtins.readFile ../../common/vim/plugins.vim}
+      ${builtins.readFile ../../config/vim/plugins.vim}
     '';
   };
 }

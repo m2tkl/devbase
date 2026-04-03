@@ -33,6 +33,6 @@
         plugin = resurrect;
       }
     ];
-    extraConfig = builtins.readFile ../../common/tmux/.tmux.conf;
+    extraConfig = builtins.readFile ../../config/tmux/.tmux.conf;
   };
 }

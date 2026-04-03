@@ -3,7 +3,7 @@ let
   localGitConfigPath = ".config/devbase/git/local.gitconfig";
 in
 {
-  home.file.".gitignore_global".source = ../../common/git/.gitignore_global;
+  home.file.".gitignore_global".source = ../../config/git/.gitignore_global;
 
   programs.git = {
     enable = true;
@@ -27,7 +27,7 @@ in
     local_git_config="$HOME/${localGitConfigPath}"
     if [ ! -e "$local_git_config" ]; then
       mkdir -p "$(dirname "$local_git_config")"
-      cp ${../../common/git/local.gitconfig.example} "$local_git_config"
+      cp ${../../config/git/local.gitconfig.example} "$local_git_config"
       chmod 600 "$local_git_config"
       echo "Created local Git config template: $local_git_config"
     fi
