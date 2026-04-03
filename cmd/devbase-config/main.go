@@ -12,6 +12,7 @@ import (
 )
 
 var nixSourceRoot string
+const repoRootConfigPath = ".config/devbase/repo-root"
 
 type target struct {
 	Name        string
@@ -281,6 +282,11 @@ func runHomeManager(action string, args []string) error {
 	if err != nil {
 		return err
 	}
+	if isMutableRepoRoot(root) {
+		if err := persistRepoRoot(root); err != nil {
+			return err
+		}
+	}
 
 	profile, err := defaultProfile()
 	if err != nil {
@@ -329,12 +335,16 @@ func repoRoot() (string, error) {
 	if root := os.Getenv("DEVBASE_ROOT"); root != "" {
 		return root, nil
 	}
+	if root, err := storedRepoRoot(); err == nil {
+		return root, nil
+	}
 	dir, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
 	for {
 		if looksLikeRepoRoot(dir) {
+			_ = persistRepoRoot(dir)
 			return dir, nil
 		}
 		parent := filepath.Dir(dir)
@@ -354,6 +364,39 @@ func repoRootOrEmbedded() (string, error) {
 		return nixSourceRoot, nil
 	}
 	return "", errors.New("devbase repo root not found and no embedded source root available")
+}
+
+func storedRepoRoot() (string, error) {
+	path := filepath.Join(userHomeDir(), repoRootConfigPath)
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	root := strings.TrimSpace(string(data))
+	if root == "" {
+		return "", errors.New("stored repo root is empty")
+	}
+	if !looksLikeRepoRoot(root) {
+		return "", fmt.Errorf("stored repo root is invalid: %s", root)
+	}
+	return root, nil
+}
+
+func persistRepoRoot(root string) error {
+	path := filepath.Join(userHomeDir(), repoRootConfigPath)
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return err
+	}
+	return os.WriteFile(path, []byte(root+"\n"), 0o644)
+}
+
+func isMutableRepoRoot(root string) bool {
+	if root == "" {
+		return false
+	}
+	cleanRoot := filepath.Clean(root)
+	cleanNix := filepath.Clean(nixSourceRoot)
+	return cleanNix == "" || cleanRoot != cleanNix
 }
 
 func defaultProfile() (string, error) {
