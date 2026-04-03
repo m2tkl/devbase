@@ -11,7 +11,28 @@ Usage: bash scripts/apply_vscode_config.sh [--backup]
 
 Copies the repo's VS Code base configuration into the current user's
 VS Code config directory for the current OS.
+On WSL, this targets the Windows VS Code directory under %APPDATA%\Code\User.
 EOF
+}
+
+is_wsl() {
+  [ -n "${WSL_DISTRO_NAME:-}" ] || grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null
+}
+
+detect_wsl_target_dir() {
+  if ! command -v cmd.exe >/dev/null 2>&1 || ! command -v wslpath >/dev/null 2>&1; then
+    echo "WSL detected, but cmd.exe or wslpath is unavailable" >&2
+    exit 1
+  fi
+
+  local appdata_win
+  appdata_win="$(cmd.exe /C "echo %APPDATA%" 2>/dev/null | tr -d '\r')"
+  if [ -z "$appdata_win" ]; then
+    echo "Failed to resolve %APPDATA% from Windows" >&2
+    exit 1
+  fi
+
+  echo "$(wslpath -u "$appdata_win")/Code/User"
 }
 
 detect_target_dir() {
@@ -20,7 +41,11 @@ detect_target_dir() {
       echo "$HOME/Library/Application Support/Code/User"
       ;;
     Linux)
-      echo "$HOME/.config/Code/User"
+      if is_wsl; then
+        detect_wsl_target_dir
+      else
+        echo "$HOME/.config/Code/User"
+      fi
       ;;
     *)
       echo "Unsupported OS: $(uname -s)" >&2

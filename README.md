@@ -147,6 +147,12 @@ VS Code is not managed by Nix.
   - `config/editor/vscode/keybindings.json`
 - Actual VS Code user files stay local to each machine and can be edited directly.
 
+Target location:
+
+- macOS: `~/Library/Application Support/Code/User`
+- Linux: `~/.config/Code/User`
+- WSL: Windows-side `%APPDATA%/Code/User`
+
 To overwrite the current machine's VS Code config from the repo, run:
 
 ```sh
