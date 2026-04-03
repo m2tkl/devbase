@@ -15,11 +15,4 @@
     wl-clipboard
     xclip
   ];
-
-  xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
-    "Code/User/settings.json".source =
-      ../../config/editor/vscode/settings.json;
-    "Code/User/keybindings.json".source =
-      ../../config/editor/vscode/keybindings.json;
-  };
 }

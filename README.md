@@ -86,6 +86,27 @@ config/git/local.gitconfig.example
 
 Edit the local file on each machine as needed. It is intentionally not managed after creation.
 
+## VS Code Configuration
+
+VS Code is not managed by Nix.
+
+- Base files in the repo:
+  - `config/editor/vscode/settings.json`
+  - `config/editor/vscode/keybindings.json`
+- Actual VS Code user files stay local to each machine and can be edited directly.
+
+To overwrite the current machine's VS Code config from the repo, run:
+
+```sh
+bash scripts/apply_vscode_config.sh
+```
+
+To keep a backup of the current files before overwriting:
+
+```sh
+bash scripts/apply_vscode_config.sh --backup
+```
+
 ## Notes
 
 - `tmux` plugins are managed by Nix. TPM is no longer used.
