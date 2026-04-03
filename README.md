@@ -31,6 +31,16 @@ Linux:
 home-manager --impure -b backup --flake .#linux switch
 ```
 
+Linux note:
+
+`zsh` settings are managed by Home Manager, but the login shell is not changed automatically.
+If you want to use `zsh` as your login shell on Ubuntu, install a system `zsh` and change it explicitly:
+
+```sh
+sudo apt install zsh
+chsh -s /usr/bin/zsh
+```
+
 If `home-manager` is not installed globally, use `nix run`:
 
 ```sh
