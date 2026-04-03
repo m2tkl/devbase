@@ -1,4 +1,541 @@
 {
-  "editor.tabSize": 2,
-  "editor.insertSpaces": true
+  /**
+   * Vim
+   */
+  "vim.leader": "<space>",
+  /* Not open automatically collapsed section */
+  "vim.foldfix": true,
+  /* Highlight match result */
+  "vim.hlsearch": true,
+  /* Search the word under cursor by '*' */
+  "vim.visualstar": true,
+  /* Enable system clipboard */
+  "vim.useSystemClipboard": true,
+  /* Enable easy motion */
+  "vim.easymotion": true,
+  "vim.insertModeKeyBindings": [
+    /* Back to normal mode by 'jk' */
+    {
+      "before": [
+        "j",
+        "k"
+      ],
+      "after": [
+        "<Esc>"
+      ]
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    /* Move the head/tail of line */
+    {
+      "before": [
+        "H"
+      ],
+      "after": [
+        "^"
+      ]
+    },
+    {
+      "before": [
+        "L"
+      ],
+      "after": [
+        "$"
+      ]
+    },
+    /* Jump bracket pair */
+    {
+      "before": [
+        "<leader>",
+        "p"
+      ],
+      "after": [
+        "%"
+      ]
+    },
+    /* Comment out with multpleline */
+    {
+      "before": [
+        "<leader>",
+        "c"
+      ],
+      "after": [
+        "g",
+        "c"
+      ]
+    },
+    /* vim-visual-multi */
+    {
+      "before": [
+        "<C-k>"
+      ],
+      "after": [
+        "g",
+        "b"
+      ]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    /* Replace find with easymotion */
+    {
+      "before": [
+        "f"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "f"
+      ]
+    },
+    {
+      "before": [
+        "F"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "F"
+      ]
+    },
+    {
+      "before": [
+        "t"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "t"
+      ]
+    },
+    {
+      "before": [
+        "T"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "T"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "f"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "2",
+        "s"
+      ]
+    },
+    /* Remove highlight of search result */
+    {
+      "before": [
+        "<Esc>",
+      ],
+      "commands": [
+        ":noh"
+      ]
+    },
+    /* Save file */
+    {
+      "before": [
+        "<leader>",
+        "w"
+      ],
+      "commands": [
+        ":w"
+      ]
+    },
+    /* Close file */
+    {
+      "before": [
+        "<leader>",
+        "q"
+      ],
+      "commands": [
+        ":q"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "x"
+      ],
+      "commands": [
+        ":q"
+      ]
+    },
+    /* Launch quick open */
+    {
+      "before": [
+        "<leader>",
+        "j",
+        "o"
+      ],
+      "commands": [
+        "workbench.action.quickOpen"
+      ]
+    },
+    /* Command pallet */
+    {
+      "before": [
+        "<leader>",
+        "j",
+        "p"
+      ],
+      "commands": [
+        "workbench.action.showCommands"
+      ]
+    },
+    /* Move tab to left or right */
+    {
+      "before": [
+        "<C-left>"
+      ],
+      "commands": [
+        ":tabm -1 "
+      ]
+    },
+    {
+      "before": [
+        "<C-right>"
+      ],
+      "commands": [
+        ":tabm +1"
+      ]
+    },
+    /* Comment out a line */
+    {
+      "before": [
+        "<leader>",
+        "c"
+      ],
+      "after": [
+        "g",
+        "c",
+        "c"
+      ]
+    },
+    /* Move line head/tail */
+    {
+      "before": [
+        "<leader>",
+        "h"
+      ],
+      "after": [
+        "^"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "l"
+      ],
+      "after": [
+        "$"
+      ]
+    },
+    /* Jump bracket pair */
+    {
+      "before": [
+        "<leader>",
+        "p"
+      ],
+      "after": [
+        "%"
+      ]
+    },
+    /* Show completion suggest view */
+    {
+      "before": [
+        ";"
+      ],
+      "commands": [
+        "editor.action.triggerSuggest"
+      ]
+    },
+    /* Move editor focus with 'hjkl' */
+    {
+      "before": [
+        "<leader>",
+        "<leader>",
+        "h"
+      ],
+      "commands": [
+        "workbench.action.focusLeftGroup"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "<leader>",
+        "j"
+      ],
+      "commands": [
+        "workbench.action.focusBelowGroup"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "<leader>",
+        "k"
+      ],
+      "commands": [
+        "workbench.action.focusAboveGroup"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "<leader>",
+        "l"
+      ],
+      "commands": [
+        "workbench.action.focusRightGroup"
+      ]
+    },
+    /* split editor */
+    {
+      "before": [
+        "<leader>",
+        "<leader>",
+        "v"
+      ],
+      "commands": [
+        ":vs"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
+        "<leader>",
+        "s"
+      ],
+      "commands": [
+        ":sp"
+      ]
+    },
+    /* vim-visual-multi */
+    {
+      "before": [
+        "<C-k>"
+      ],
+      "after": [
+        "g",
+        "b"
+      ]
+    },
+    /* Toggle line numbers (requires 'Settings Cycler' extention) */
+    {
+      "before": [
+        "<leader>",
+        "<leader>",
+        "L"
+      ],
+      "commands": [
+        "settings.cycle.lineNumbers"
+      ]
+    },
+    /* Toggle comment enhancement */
+    {
+      "before": [
+        "<leader>",
+        "<leader>",
+        "C"
+      ],
+      "commands": [
+        "settings.cycle.enhanceComment"
+      ]
+    }
+  ],
+  /**
+   * Editor settings
+   */
+  /* minimapを非表示にする */
+  "editor.minimap.enabled": false,
+  /* 末尾のスペースを可視化 */
+  "editor.renderWhitespace": "trailing",
+  /* 行間を詰める（defaultは18?）*/
+  "editor.lineHeight": 17,
+  /* Zoom only editor by mouse wheel */
+  "editor.mouseWheelZoom": true,
+  /* Explorerで開いているファイルを強調表示するが、スクロールはしない */
+  "explorer.autoReveal": "focusNoScroll",
+  /* Remove trailing unused space automatically */
+  "files.trimTrailingWhitespace": true,
+  /* Insert new line file trail */
+  "files.insertFinalNewline": true,
+  "files.autoSaveDelay": 5000,
+  /* 起動時には何も表示しない */
+  "workbench.startupEditor": "none",
+  /* ファイル削除時にエディタを閉じる */
+  "workbench.editor.closeOnFileDelete": true,
+  /* Enable pair bracket color */
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  /* Breadcrumbs setting */
+  "breadcrumbs.filePath": "last",
+  /**
+   * Toggle commands (cycle extension)
+   * https://marketplace.visualstudio.com/items?itemName=hoovercj.vscode-settings-cycler
+   */
+  "settings.cycle": [
+    /* Toggle line numbers */
+    {
+      "id": "lineNumbers",
+      "values": [
+        {
+          "editor.lineNumbers": "off"
+        },
+        {
+          "editor.lineNumbers": "on"
+        }
+      ]
+    },
+    /* Toggle comment enhancement */
+    {
+      "id": "enhanceComment",
+      "values": [
+        {
+          "editor.tokenColorCustomizations": {
+            "comments": "#d4922f"
+          }
+        },
+        {
+          "editor.tokenColorCustomizations": { /* do nathing */}
+        }
+      ]
+    }
+  ],
+  /**
+   * Language settings
+   */
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.defaultFormatter": "ms-python.autopep8"
+  },
+  "[vue]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+  },
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+  },
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+  },
+  "[javascriptreact]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[typescriptreact]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[html]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+  },
+  "[css]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  /**
+   * Termianl
+   */
+  /* terminalのtabのタイトルをitermのような挙動にする */
+  "terminal.integrated.tabs.title": "${sequence}",
+  /**
+   * File watcher exclude
+   */
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "**/.hg/store/**": true,
+    "**/.bloop": true,
+    "**/.metals": true,
+    "**/.ammonite": true
+  },
+  "go.toolsManagement.autoUpdate": true,
+  "explorer.confirmDragAndDrop": false,
+  "workbench.editorAssociations": {
+    "*.png": "imagePreview.previewEditor",
+    "*.ipynb": "jupyter-notebook"
+  },
+  "explorer.confirmDelete": false,
+  "markdown-preview-enhanced.previewTheme": "github-light.css",
+  "markdown-preview-enhanced.printBackground": true,
+  "security.workspace.trust.untrustedFiles": "open",
+  "python.showStartPage": false,
+  "git.confirmSync": false,
+  "notebook.cellToolbarLocation": {
+    "default": "right",
+    "jupyter-notebook": "left"
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "editor.lineNumbers": "on",
+  "editor.tokenColorCustomizations": {},
+  "vsicons.dontShowNewVersionMessage": true,
+  "breadcrumbs.enabled": false,
+  "haskell.manageHLS": "GHCup",
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "todo-tree.general.showActivityBarBadge": true,
+  "todo-tree.highlights.customHighlight": {
+    "[ ]": {
+      "background": "#ff000080"
+    },
+    "[x]": {
+      "background": "#00ff0080"
+    }
+  },
+  "update.showReleaseNotes": false,
+  "git.openRepositoryInParentFolders": "never",
+  "apc.electron": {
+    "backgroundColor": "rgba(40, 42, 54, 0.8)", // Set this to desired bg color
+    "frame": false,
+    "transparent": true,
+    "titleBarStyle": "hiddenInset",
+    "vibrancy": "ultra-dark",
+    "opacity": 0.75, // Range: 0-1 (To go fully transparent, set it to 0)
+    "visualEffectState": "active",
+  },
+  "apc.listRow": {
+    "height": 24,
+    "fontSize": 12
+  },
+  // "window.titleBarStyle": "native",
+  "workbench.editor.editorActionsLocation": "titleBar",
+  "apc.font.family": "Geist Mono",
+  "update.mode": "manual",
+  "workbench.colorTheme": "FireFly Pro Midnight",
+  "diffEditor.ignoreTrimWhitespace": true,
+  "workbench.iconTheme": "vscode-icons",
+  "editor.formatOnSave": true,
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "window.titleBarStyle": "custom",
+  "docker.extension.enableComposeLanguageServer": false
 }

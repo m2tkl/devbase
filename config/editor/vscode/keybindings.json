@@ -1,0 +1,275 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+
+    /**
+     * System
+     */
+
+    /* Open command pallet */
+    {
+        "key": "ctrl+j p",
+        "command": "workbench.action.showCommands"
+    },
+    /* Quick open */
+    {
+        "key": "ctrl+j o",
+        "command": "workbench.action.quickOpen"
+    },
+    /* List symbols */
+    {
+        "key": "ctrl+j l",
+        "command": "workbench.action.gotoSymbol"
+    },
+    {
+        "key": "ctrl+j t",
+        "command": "workbench.action.showAllSymbols"
+    },
+    /**
+     * Editor
+     */
+
+    /* Move editor focus */
+    {
+        "key": "ctrl+tab",
+        "command": "workbench.action.nextEditorInGroup"
+    },
+    {
+        "key": "ctrl+shift+tab",
+        "command": "workbench.action.previousEditorInGroup"
+    },
+
+    /**
+     * Sidebar
+     */
+
+    /* Open file explorer */
+    {
+        "key": "ctrl+j e",
+        "command": "workbench.files.action.focusFilesExplorer"
+    },
+    /* Create new file */
+    {
+        "key": "n",
+        "command": "explorer.newFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
+    },
+    /* Create new folder */
+    {
+        "key": "shift+n",
+        "command": "explorer.newFolder",
+        "when": "explorerViewletVisible && filesExplorerFocus && !inputFocus"
+    },
+    /* Rename */
+    {
+        "key": "r",
+        "command": "renameFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "enter",
+        "command": "-renameFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    /* Split vertical and focus */
+    {
+        "key": "v",
+        "command": "explorer.openToSide",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    /* Copy & paste file */
+    {
+        "key": "y",
+        "command": "filesExplorer.copy",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "p",
+        "command": "filesExplorer.paste",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    // shift+y で相対パスをコピー
+    {
+        "key": "shift+y",
+        "command": "copyRelativeFilePath",
+        "when": "!editorFocus"
+    },
+    {
+        "key": "shift+alt+cmd+c",
+        "command": "-copyRelativeFilePath",
+        "when": "!editorFocus"
+    },
+    /* Delete file */
+    {
+        "key": "d",
+        "command": "deleteFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
+    },
+    /* Toggle sidebar */
+    {
+        "key": "ctrl+j b",
+        "command": "workbench.action.toggleSidebarVisibility",
+    },
+    /* Focus editor from sidebar */
+    {
+        "key": "ctrl+j l",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "sideBarFocus"
+    },
+    // ===
+    // Terminal
+    // ===
+    // Close panel
+    {
+        // "key": "ctrl+j shift+j",
+        "key": "shift shift",
+        "command": "workbench.action.closePanel",
+    },
+    //
+    {
+        "key": "ctrl+j j",
+        "command": "workbench.action.terminal.focus",
+    },
+    {
+        "key": "ctrl+j k",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "terminalFocus"
+    },
+    // Split terminal in same pane
+    //
+    // NOTE:
+    //   vscode terminal can be splitted only vertical (|).
+    //   However, editor area can be split either horizontally or vertically.
+    //   So, I prepared both to match the interface of split.
+    {
+        "key": "ctrl+j s",
+        "command": "workbench.action.terminal.split",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+j v",
+        "command": "workbench.action.terminal.split",
+        "when": "terminalFocus"
+    },
+    // Create new terminal
+    {
+        "key": "ctrl+j c",
+        "command": "workbench.action.terminal.new",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+j a",
+        "command": "workbench.action.terminal.new",
+        "when": "terminalFocus"
+    },
+    // Move terinal focus
+    {
+        "key": "ctrl+j h",
+        "command": "workbench.action.terminal.focusPreviousPane",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+j l",
+        "command": "workbench.action.terminal.focusNextPane",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+j n",
+        "command": "workbench.action.terminal.focusNext",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+j p",
+        "command": "workbench.action.terminal.focusPrevious",
+        "when": "terminalFocus"
+    },
+    // Close terminal
+    {
+        "key": "ctrl+j x",
+        "command": "workbench.action.terminal.kill",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+tab",
+        "command": "search.action.focusSearchList",
+        "when": "searchViewletFocus"
+    },
+    // ===
+    // Workbench
+    // ===
+    // Focus search window
+    {
+        "key": "ctrl+j f",
+        "command": "workbench.action.findInFiles"
+    },
+    // Focus search result list
+    {
+        "key": "ctrl+j ctrl+f",
+        "command": "search.action.focusSearchList"
+    },
+    {
+        "key": "ctrl+j d",
+        "command": "workbench.view.debug"
+    },
+    {
+        "key": "ctrl+j g",
+        "command": "workbench.view.scm"
+    },
+    {
+        "key": "ctrl+j ctrl+x",
+        "command": "workbench.view.extensions"
+    },
+    {
+        "key": "ctrl+j ctrl+p",
+        "command": "workbench.view.extension.project-manager"
+    },
+
+    /**
+     * Experimental
+     */
+
+    /**/
+    {
+        "key": "ctrl+j shift+r",
+        "command": "workbench.action.toggleAuxiliaryBar",
+        "when": "auxiliaryBarVisible"
+    },
+    {
+        "key": "ctrl+j r",
+        "command": "workbench.action.focusAuxiliaryBar",
+        "when": "!auxiliaryBarFocus"
+    },
+
+    /* Open Dendron */
+    {
+        "key": "ctrl+d d",
+        "command": "workbench.view.extension.dendron-view"
+    },
+    {
+        "key": "ctrl+d j",
+        "command": "dendron.createDailyJournalNote"
+    },
+    {
+        "key": "ctrl+d l",
+        "command": "dendron.lookupNote"
+    },
+    {
+        "key": "ctrl+d n",
+        "command": "dendron.createNote"
+    },
+    {
+        "key": "ctrl+d v",
+        "command": "dendron.togglePreview"
+    },
+    {
+        "key": "ctrl+j v",
+        "command": "markdown-preview-enhanced.openPreviewToTheSide"
+    },
+    {
+        "key": "shift+enter",
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+            "text": "\\\r\n"
+        },
+        "when": "terminalFocus"
+    }
+]

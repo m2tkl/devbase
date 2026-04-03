@@ -16,6 +16,10 @@
     xclip
   ];
 
-  xdg.configFile."Code/User/settings.json".source =
-    ../../config/editor/vscode/settings.json;
+  xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
+    "Code/User/settings.json".source =
+      ../../config/editor/vscode/settings.json;
+    "Code/User/keybindings.json".source =
+      ../../config/editor/vscode/keybindings.json;
+  };
 }
