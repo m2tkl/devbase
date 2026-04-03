@@ -13,3 +13,7 @@ fi
 
 export VISUAL=vim
 export EDITOR=vim
+
+if [ -f "$HOME/.config/devbase/shell.local.zsh" ]; then
+  source "$HOME/.config/devbase/shell.local.zsh"
+fi

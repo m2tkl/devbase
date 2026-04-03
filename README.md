@@ -122,6 +122,22 @@ with pkgs; [
 
 These packages are added to `home.packages` only on the current machine.
 
+## Local Shell Configuration
+
+Machine-specific shell settings can be added in:
+
+```sh
+~/.config/devbase/shell.local.zsh
+```
+
+On first activation, devbase creates it from:
+
+```sh
+config/shell.local.zsh.example
+```
+
+This file is sourced from `config/shell/.zshrc`, so it is the right place for per-machine tool initialization and environment variables.
+
 ## VS Code Configuration
 
 VS Code is not managed by Nix.

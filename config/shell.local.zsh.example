@@ -1,0 +1,6 @@
+# Machine-specific zsh settings go here.
+#
+# Examples:
+# eval "$(some-tool init zsh)"
+# export COMPANY_FOO=1
+# alias work-k8s="kubectl config use-context work"

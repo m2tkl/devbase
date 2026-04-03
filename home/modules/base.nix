@@ -31,5 +31,12 @@ in
       chmod 600 "$extra_packages"
       echo "Created local packages template: $extra_packages"
     fi
+
+    local_shell="$HOME/.config/devbase/shell.local.zsh"
+    if [ ! -e "$local_shell" ]; then
+      cp ${../../config/shell.local.zsh.example} "$local_shell"
+      chmod 600 "$local_shell"
+      echo "Created local shell config template: $local_shell"
+    fi
   '';
 }
