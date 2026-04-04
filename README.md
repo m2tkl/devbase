@@ -8,7 +8,7 @@ devbase is my developer machine baseline managed with Nix and Home Manager.
 - `tmux`
 - `vim`
 - common dotfiles such as Git and VS Code settings
-- base CLI packages such as `gh`, `ghq`, `lazygit`, `fzf`, `ripgrep`, `peco`
+- base CLI packages such as `gh`, `ghq`, `lazygit`, `fzf`, `ripgrep`, `peco`, `fd`, `bat`
 
 ## Prerequisites
 
@@ -181,6 +181,11 @@ config/shell.local.zsh.example
 ```
 
 This file is sourced from `config/shell/.zshrc`, so it is the right place for per-machine tool initialization and environment variables.
+
+Terminal navigation helpers:
+
+- `ff`: open a file and directory picker with `fzf`; files open in `$EDITOR`, directories change the current shell directory
+- `cdf`: open a directory picker with `fzf` and `cd` into the result
 
 ## VS Code Configuration
 

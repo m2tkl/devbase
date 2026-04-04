@@ -10,6 +10,8 @@ in
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    bat
+    fd
     gh
     ghq
     lazygit
