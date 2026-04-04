@@ -32,7 +32,7 @@
           inherit src;
           modRoot = ".";
           subPackages = [ "cmd/devbase-config" ];
-          vendorHash = null;
+          vendorHash = "sha256-vj6i7Uc5LXnOF3Gi/GKy+FQ/I6eSyt2kKgZl8C5u2MM=";
           ldflags = [
             "-X"
             "main.nixSourceRoot=${src}"

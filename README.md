@@ -84,16 +84,25 @@ Use the helper CLI to edit common and local config files:
 
 ```sh
 devbase-config list
+devbase-config ui
 devbase-config edit git-local
 devbase-config edit shell-local
 devbase-config edit tmux
 ```
+
+`devbase-config ui` opens a full-screen terminal UI for browsing targets and running common actions.
 
 For VS Code base config deployment:
 
 ```sh
 devbase-config apply vscode --backup
 ```
+
+`devbase-config apply <target>` uses each target's apply mode:
+
+- `switch`: runs Home Manager switch
+- `manual`: runs the target-specific manual installer
+- `auto`: no extra apply step is needed
 
 ## Structure
 

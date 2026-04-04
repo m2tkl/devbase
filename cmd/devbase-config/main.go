@@ -11,6 +11,9 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 var nixSourceRoot string
@@ -52,6 +55,8 @@ func run(args []string) error {
 	switch args[0] {
 	case "list":
 		return cmdList()
+	case "ui":
+		return runTUI()
 	case "pull":
 		return pullRepo()
 	case "switch":
@@ -79,15 +84,19 @@ func run(args []string) error {
 		return openEditor(path)
 	case "apply":
 		if len(args) < 2 {
-			return errors.New("usage: devbase-config apply vscode [--backup]")
+			return errors.New("usage: devbase-config apply <target> [--backup]")
 		}
-		switch args[1] {
-		case "vscode":
-			backup := len(args) > 2 && args[2] == "--backup"
-			return applyVSCode(backup)
-		default:
-			return fmt.Errorf("unknown apply target: %s", args[1])
+		backup := false
+		if len(args) > 3 {
+			return errors.New("usage: devbase-config apply <target> [--backup]")
 		}
+		if len(args) == 3 {
+			if args[2] != "--backup" {
+				return errors.New("usage: devbase-config apply <target> [--backup]")
+			}
+			backup = true
+		}
+		return runApply(args[1], backup)
 	case "-h", "--help", "help":
 		printUsage()
 		return nil
@@ -99,12 +108,13 @@ func run(args []string) error {
 func printUsage() {
 	fmt.Println(`Usage:
   devbase-config list
+  devbase-config ui
   devbase-config pull
   devbase-config switch [--backup]
   devbase-config build
   devbase-config path <target>
   devbase-config edit <target>
-  devbase-config apply vscode [--backup]`)
+  devbase-config apply <target> [--backup]`)
 }
 
 func cmdList() error {
@@ -113,6 +123,236 @@ func cmdList() error {
 		fmt.Printf("%-20s %-8s %-8s %s\n", t.Name, t.Source, t.Apply, t.Description)
 	}
 	return nil
+}
+
+type commandFinishedMsg struct {
+	status string
+	err    error
+}
+
+type uiModel struct {
+	selected int
+	width    int
+	height   int
+	status   string
+}
+
+func runTUI() error {
+	model := uiModel{
+		status: "Ready",
+	}
+	_, err := tea.NewProgram(model, tea.WithAltScreen()).Run()
+	return err
+}
+
+func (m uiModel) Init() tea.Cmd {
+	return nil
+}
+
+func (m uiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.width = msg.Width
+		m.height = msg.Height
+		return m, nil
+	case commandFinishedMsg:
+		if msg.err != nil {
+			m.status = "Error: " + msg.err.Error()
+		} else {
+			m.status = msg.status
+		}
+		return m, nil
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "q", "ctrl+c":
+			return m, tea.Quit
+		case "j", "down":
+			if m.selected < len(targets)-1 {
+				m.selected++
+			}
+			return m, nil
+		case "k", "up":
+			if m.selected > 0 {
+				m.selected--
+			}
+			return m, nil
+		case "g", "home":
+			m.selected = 0
+			return m, nil
+		case "G", "end":
+			m.selected = len(targets) - 1
+			return m, nil
+		case "enter", "e":
+			path, err := resolvePath(targets[m.selected].Name, true)
+			if err != nil {
+				m.status = "Error: " + err.Error()
+				return m, nil
+			}
+			cmd, err := editorCommand(path)
+			if err != nil {
+				m.status = "Error: " + err.Error()
+				return m, nil
+			}
+			return m, tea.ExecProcess(cmd, func(err error) tea.Msg {
+				return commandFinishedMsg{status: "Edited: " + path, err: err}
+			})
+		case "a":
+			return m, applyTargetCmd(targets[m.selected].Name, false)
+		case "A":
+			return m, applyTargetCmd(targets[m.selected].Name, true)
+		case "b":
+			cmd, err := homeManagerCommand("build", nil)
+			if err != nil {
+				m.status = "Error: " + err.Error()
+				return m, nil
+			}
+			return m, tea.ExecProcess(cmd, func(err error) tea.Msg {
+				return commandFinishedMsg{status: "Build finished", err: err}
+			})
+		case "u":
+			cmd, err := pullCommand()
+			if err != nil {
+				m.status = "Error: " + err.Error()
+				return m, nil
+			}
+			return m, tea.ExecProcess(cmd, func(err error) tea.Msg {
+				return commandFinishedMsg{status: "Pull finished", err: err}
+			})
+		}
+	}
+	return m, nil
+}
+
+func (m uiModel) View() string {
+	selected := targets[m.selected]
+
+	appStyle := lipgloss.NewStyle().Padding(0, 1, 0, 1)
+	headerStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("69"))
+	panelStyle := lipgloss.NewStyle().Border(lipgloss.NormalBorder()).Padding(0, 1)
+	selectedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("230")).Background(lipgloss.Color("62")).Bold(true)
+	mutedStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("245"))
+	titleStyle := lipgloss.NewStyle().Bold(true)
+
+	path, err := resolvePath(selected.Name, false)
+	if err != nil {
+		path = err.Error()
+	}
+	contentWidth := m.width - appStyle.GetHorizontalFrameSize()
+	if contentWidth < 40 {
+		contentWidth = 40
+	}
+	contentHeight := m.height - appStyle.GetVerticalFrameSize()
+	if contentHeight < 6 {
+		contentHeight = 6
+	}
+
+	panelWidth := contentWidth - 2
+	if panelWidth < 40 {
+		panelWidth = 40
+	}
+	path = truncateRunes(path, maxInt(8, panelWidth-12))
+
+	topLines := []string{
+		renderLabelValue(titleStyle, "Selected", selected.Name),
+		renderLabelValue(titleStyle, "Path", path),
+		renderLabelValue(titleStyle, "Status", m.status),
+	}
+	top := panelStyle.Width(panelWidth).Render(strings.Join(topLines, "\n"))
+
+	var rows []string
+	rows = append(rows, headerStyle.Render("Targets"))
+	rows = append(rows, mutedStyle.Render(fmt.Sprintf("%-20s %-8s %-8s %s", "TARGET", "SOURCE", "APPLY", "DESCRIPTION")))
+	for i, t := range targets {
+		row := fmt.Sprintf("%-20s %-8s %-8s %s", t.Name, t.Source, t.Apply, t.Description)
+		if i == m.selected {
+			rows = append(rows, selectedStyle.Render(row))
+		} else {
+			rows = append(rows, row)
+		}
+	}
+
+	help := panelStyle.Width(panelWidth).Render(
+		mutedStyle.Render("j/k: move  enter/e: edit  a/A: apply  b: build  u: pull  q: quit"),
+	)
+
+	panelGap := 0
+	remainingHeight := contentHeight - lipgloss.Height(top) - lipgloss.Height(help) - (panelGap * 2)
+	listContentHeight := remainingHeight - 2
+	if listContentHeight < 1 {
+		listContentHeight = 1
+	}
+	list := panelStyle.Width(panelWidth).Height(listContentHeight).Render(strings.Join(rows, "\n"))
+
+	view := lipgloss.JoinVertical(
+		lipgloss.Left,
+		headerStyle.Render("devbase-config ui"),
+		top,
+		list,
+		help,
+	)
+	return appStyle.Render(view)
+}
+
+func maxInt(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func truncateRunes(s string, max int) string {
+	runes := []rune(s)
+	if len(runes) <= max {
+		return s
+	}
+	if max <= 3 {
+		return string(runes[:max])
+	}
+	return string(runes[:max-3]) + "..."
+}
+
+func renderLabelValue(style lipgloss.Style, label, value string) string {
+	return fmt.Sprintf("%s %s", style.Render(fmt.Sprintf("%-8s", label+":")), value)
+}
+
+func applyTargetCmd(name string, backup bool) tea.Cmd {
+	return func() tea.Msg {
+		status, err := applyTargetStatus(name, backup)
+		return commandFinishedMsg{status: status, err: err}
+	}
+}
+
+func runApply(name string, backup bool) error {
+	_, err := applyTargetStatus(name, backup)
+	return err
+}
+
+func applyTargetStatus(name string, backup bool) (string, error) {
+	switch name {
+	case "git-common", "packages-local", "shell-common", "tmux", "vim-core", "vim-plugins":
+		args := []string{}
+		status := "Applied via Home Manager switch"
+		if backup {
+			args = append(args, "--backup")
+			status = "Applied via Home Manager switch with backup"
+		}
+		if err := runHomeManager("switch", args); err != nil {
+			return "", err
+		}
+		return status, nil
+	case "git-local", "shell-local":
+		return "No apply needed; local config is already the source of truth", nil
+	case "vscode", "vscode-settings", "vscode-keybindings":
+		if err := applyVSCode(backup); err != nil {
+			return "", err
+		}
+		if backup {
+			return "Applied VS Code config with backup", nil
+		}
+		return "Applied VS Code config", nil
+	default:
+		return "", fmt.Errorf("unknown apply target: %s", name)
+	}
 }
 
 func resolvePath(name string, prepare bool) (string, error) {
@@ -189,16 +429,27 @@ func resolvePath(name string, prepare bool) (string, error) {
 }
 
 func openEditor(path string) error {
+	cmd, err := editorCommand(path)
+	if err != nil {
+		return err
+	}
+	return cmd.Run()
+}
+
+func editorCommand(path string) (*exec.Cmd, error) {
 	editor := os.Getenv("EDITOR")
 	if editor == "" {
 		editor = "vim"
 	}
 	parts := strings.Fields(editor)
+	if len(parts) == 0 {
+		return nil, errors.New("EDITOR is empty")
+	}
 	cmd := exec.Command(parts[0], append(parts[1:], path)...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	return cmd, nil
 }
 
 func ensureFile(path, content string) error {
@@ -502,19 +753,35 @@ func stripTrailingCommas(data []byte) []byte {
 }
 
 func pullRepo() error {
-	root, err := repoRoot()
+	cmd, err := pullCommand()
 	if err != nil {
 		return err
+	}
+	return cmd.Run()
+}
+
+func pullCommand() (*exec.Cmd, error) {
+	root, err := repoRoot()
+	if err != nil {
+		return nil, err
 	}
 
 	cmd := exec.Command("git", "-C", root, "pull", "--ff-only")
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	return cmd, nil
 }
 
 func runHomeManager(action string, args []string) error {
+	cmd, err := homeManagerCommand(action, args)
+	if err != nil {
+		return err
+	}
+	return cmd.Run()
+}
+
+func homeManagerCommand(action string, args []string) (*exec.Cmd, error) {
 	backup := false
 	dryRun := false
 	for _, arg := range args {
@@ -524,23 +791,23 @@ func runHomeManager(action string, args []string) error {
 		case "-n", "--dry-run":
 			dryRun = true
 		default:
-			return fmt.Errorf("unknown option for %s: %s", action, arg)
+			return nil, fmt.Errorf("unknown option for %s: %s", action, arg)
 		}
 	}
 
 	root, err := repoRootOrEmbedded()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if isMutableRepoRoot(root) {
 		if err := persistRepoRoot(root); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
 	profile, err := defaultProfile()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var cmd *exec.Cmd
@@ -568,7 +835,7 @@ func runHomeManager(action string, args []string) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	return cmd, nil
 }
 
 func backupIfExists(path string) error {
