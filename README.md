@@ -186,6 +186,7 @@ Terminal navigation helpers:
 
 - `ff`: open a file and directory picker with `fzf`; files open in `$EDITOR`, directories change the current shell directory
 - `cdf`: open a directory picker with `fzf` and `cd` into the result
+- `cgr`: open a `ghq` repository picker and `cd` into the selected local repo
 
 ## VS Code Configuration
 
@@ -220,6 +221,8 @@ devbase-config apply vscode --backup
 ```
 
 ## Notes
+
+- Shell-related pitfalls and rationale are documented in `docs/shell-notes.md`.
 
 - `tmux` plugins are managed by Nix. TPM is no longer used.
 - `vim` plugins are managed by Nix. `vim-plug` is no longer used.

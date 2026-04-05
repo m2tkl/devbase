@@ -1,5 +1,14 @@
 # devbase common zsh config
 
+typeset -U path PATH
+if [ -d "$HOME/.nix-profile/bin" ]; then
+  path=("$HOME/.nix-profile/bin" $path)
+fi
+if [ -d "/nix/var/nix/profiles/default/bin" ]; then
+  path=("/nix/var/nix/profiles/default/bin" $path)
+fi
+export PATH
+
 if [ -e "$HOME/.nix-profile/share/zsh/site-functions/prompt_pure_setup" ]; then
   fpath=("$HOME/.nix-profile/share/zsh/site-functions" $fpath)
   autoload -U promptinit
@@ -48,6 +57,27 @@ function cdf() {
   )" || return
   [ -n "$dir" ] || return
   cd -- "$dir"
+}
+
+function cgr() {
+  local root selected repo_path
+  root="$(ghq root)" || return
+  selected="$(
+    ghq list -p | \
+      while IFS= read -r repo_path; do
+        printf '%s\t%s\n' "${repo_path#"$root"/}" "$repo_path"
+      done | \
+      fzf --height=80% --layout=reverse --border \
+        --prompt='repo> ' \
+        --delimiter='\t' \
+        --with-nth=1 \
+        --preview-window='down,60%,border-top' \
+        --preview 'git -C {2} log --oneline --decorate -n 30 2>/dev/null'
+  )" || return
+  [ -n "$selected" ] || return
+  repo_path="${selected#*$'\t'}"
+  [ -n "$repo_path" ] || return
+  cd -- "$repo_path"
 }
 
 if [ -f "$HOME/.config/devbase/shell.local.zsh" ]; then
