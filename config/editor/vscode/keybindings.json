@@ -240,7 +240,7 @@
     },
     {
         "key": "ctrl+j v",
-        "command": "markdown.showPreviewToSide"
+        "command": "markdown.showPreview"
     },
     {
         "key": "shift+enter",
