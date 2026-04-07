@@ -116,7 +116,36 @@ let &t_EI="\e[2 q"
 "" Editor setting
 ""
 
-set clipboard+=unnamed          " OSクリップボード使用
+set clipboard+=unnamedplus      " OSクリップボード使用
+
+if !has('clipboard_working')
+    function! s:copy_yank_to_system_clipboard() abort
+        if get(v:event, 'operator', '') !=# 'y'
+            return
+        endif
+
+        let l:clipboard_cmd = ''
+        if executable('pbcopy')
+            let l:clipboard_cmd = 'pbcopy'
+        elseif executable('wl-copy')
+            let l:clipboard_cmd = 'wl-copy'
+        elseif executable('xclip')
+            let l:clipboard_cmd = 'xclip -in -selection clipboard'
+        endif
+
+        if empty(l:clipboard_cmd)
+            return
+        endif
+
+        call system(l:clipboard_cmd, getreg('"'))
+    endfunction
+
+    augroup systemClipboardFallback
+        autocmd!
+        autocmd TextYankPost * call s:copy_yank_to_system_clipboard()
+    augroup END
+endif
+
 set backspace=indent,eol,start  " バックスペースでなんでも消せるようにする
 
 set tabstop=4                   " <Tab>幅
