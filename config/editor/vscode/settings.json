@@ -471,6 +471,7 @@
     "**/.ammonite": true
   },
   "go.toolsManagement.autoUpdate": true,
+  "explorer.compactFolders": false,
   "explorer.confirmDragAndDrop": false,
   "workbench.editorAssociations": {
     "*.png": "imagePreview.previewEditor",
