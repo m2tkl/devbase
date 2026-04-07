@@ -238,31 +238,9 @@
         "command": "workbench.action.focusAuxiliaryBar",
         "when": "!auxiliaryBarFocus"
     },
-
-    /* Open Dendron */
-    {
-        "key": "ctrl+d d",
-        "command": "workbench.view.extension.dendron-view"
-    },
-    {
-        "key": "ctrl+d j",
-        "command": "dendron.createDailyJournalNote"
-    },
-    {
-        "key": "ctrl+d l",
-        "command": "dendron.lookupNote"
-    },
-    {
-        "key": "ctrl+d n",
-        "command": "dendron.createNote"
-    },
-    {
-        "key": "ctrl+d v",
-        "command": "dendron.togglePreview"
-    },
     {
         "key": "ctrl+j v",
-        "command": "markdown-preview-enhanced.openPreviewToTheSide"
+        "command": "markdown.showPreviewToSide"
     },
     {
         "key": "shift+enter",

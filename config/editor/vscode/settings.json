@@ -450,9 +450,6 @@
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  "[markdown]": {
-    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-  },
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer"
   },
@@ -480,8 +477,6 @@
     "*.ipynb": "jupyter-notebook"
   },
   "explorer.confirmDelete": false,
-  "markdown-preview-enhanced.previewTheme": "github-light.css",
-  "markdown-preview-enhanced.printBackground": true,
   "security.workspace.trust.untrustedFiles": "open",
   "python.showStartPage": false,
   "git.confirmSync": false,
