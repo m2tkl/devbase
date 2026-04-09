@@ -27,6 +27,18 @@ fi
 export VISUAL=vim
 export EDITOR=vim
 
+function __devbase_history_candidates() {
+  fc -rl 1 | sed -E 's/^[[:space:]]*[0-9]+[[:space:]]+//'
+}
+
+function __devbase_select_history() {
+  local query="${1:-}"
+  __devbase_history_candidates | \
+    fzf --height=80% --layout=reverse --border \
+      --prompt='history> ' \
+      --query="$query"
+}
+
 # Pick a file or directory with fzf.
 function ff() {
   local entry
@@ -86,6 +98,36 @@ function cgr() {
   [ -n "$repo_path" ] || return
   cd -- "$repo_path"
 }
+
+function fh() {
+  local cmd
+  cmd="$(__devbase_select_history)" || return
+  [ -n "$cmd" ] || return
+  vared -p 'cmd> ' -c cmd || return
+  [ -n "$cmd" ] || return
+  print -s -- "$cmd"
+  eval "$cmd"
+}
+
+function fhr() {
+  local cmd
+  cmd="$(__devbase_select_history)" || return
+  [ -n "$cmd" ] || return
+  print -s -- "$cmd"
+  eval "$cmd"
+}
+
+function __devbase_fh_widget() {
+  local cmd
+  cmd="$(__devbase_select_history "${LBUFFER:-}")" || return
+  [ -n "$cmd" ] || return
+  BUFFER="$cmd"
+  CURSOR=${#BUFFER}
+  zle redisplay
+}
+
+zle -N __devbase_fh_widget
+bindkey '^R' __devbase_fh_widget
 
 if [ -f "$HOME/.config/devbase/shell.local.zsh" ]; then
   source "$HOME/.config/devbase/shell.local.zsh"
