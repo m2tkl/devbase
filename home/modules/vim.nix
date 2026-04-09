@@ -4,6 +4,7 @@
     enable = true;
     defaultEditor = true;
     plugins = with pkgs.vimPlugins; [
+      ayu-vim
       vim-easymotion
       lightline-vim
       vim-lsp

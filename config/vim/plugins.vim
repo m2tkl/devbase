@@ -7,6 +7,38 @@ set laststatus=2
 
 
 ""
+"" ayu
+""
+
+if exists('+termguicolors')
+  set termguicolors
+endif
+
+let g:ayucolor = 'dark'
+colorscheme ayu
+
+function! s:apply_ayu(mode) abort
+    let g:ayucolor = a:mode
+    execute 'set background=' . a:mode
+    colorscheme ayu
+endfunction
+
+function! s:toggle_ayu() abort
+    if get(g:, 'ayucolor', 'dark') ==# 'light'
+        call s:apply_ayu('dark')
+    else
+        call s:apply_ayu('light')
+    endif
+endfunction
+
+command! AyuDark call s:apply_ayu('dark')
+command! AyuLight call s:apply_ayu('light')
+command! AyuToggle call s:toggle_ayu()
+
+nnoremap <silent> <leader><leader>y :AyuToggle<CR>
+
+
+""
 "" easy-align
 ""
 
@@ -92,9 +124,9 @@ nnoremap gh :GitGutterLineHighlightsToggle<CR>
 " gpでカーソル行のdiffを表示する
 nnoremap gp :GitGutterPreviewHunk<CR>
 " 記号の色を変更する
-highlight GitGutterAdd ctermfg=green
-highlight GitGutterChange ctermfg=blue
-highlight GitGutterDelete ctermfg=red
+highlight GitGutterAdd ctermfg=green guifg=#aad94c
+highlight GitGutterChange ctermfg=blue guifg=#59c2ff
+highlight GitGutterDelete ctermfg=red guifg=#f07178
 
 "" 反映時間を短くする(デフォルトは4000ms)
 set updatetime=250
