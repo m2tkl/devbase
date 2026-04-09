@@ -15,6 +15,7 @@ in
     gh
     ghq
     lazygit
+    mise
     peco
     pnpm
     pure-prompt

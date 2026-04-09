@@ -8,7 +8,7 @@ devbase is my developer machine baseline managed with Nix and Home Manager.
 - `tmux`
 - `vim`
 - common dotfiles such as Git and VS Code settings
-- base CLI packages such as `gh`, `ghq`, `lazygit`, `fzf`, `ripgrep`, `peco`, `fd`, `bat`
+- base CLI packages such as `gh`, `ghq`, `lazygit`, `fzf`, `ripgrep`, `peco`, `fd`, `bat`, `mise`
 
 ## Prerequisites
 
@@ -181,6 +181,16 @@ config/shell.local.zsh.example
 ```
 
 This file is sourced from `config/shell/.zshrc`, so it is the right place for per-machine tool initialization and environment variables.
+
+`mise` is installed as a base tool, and `config/shell/.zshrc` activates it automatically when available.
+
+For Node.js, prefer managing the runtime with `mise` instead of installing `nodejs` through Nix when you expect to use npm global CLIs or switch Node versions.
+
+Example:
+
+```sh
+mise use -g node@24
+```
 
 Terminal navigation helpers:
 
