@@ -11,6 +11,7 @@ in
 
   home.packages = with pkgs; [
     bat
+    direnv
     fd
     gh
     ghq

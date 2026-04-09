@@ -8,7 +8,7 @@ devbase is my developer machine baseline managed with Nix and Home Manager.
 - `tmux`
 - `vim`
 - common dotfiles such as Git and VS Code settings
-- base CLI packages such as `gh`, `ghq`, `lazygit`, `fzf`, `ripgrep`, `peco`, `fd`, `bat`, `mise`
+- base CLI packages such as `gh`, `ghq`, `lazygit`, `fzf`, `ripgrep`, `peco`, `fd`, `bat`, `mise`, `direnv`
 
 ## Prerequisites
 
@@ -190,6 +190,13 @@ Example:
 
 ```sh
 mise use -g node@24
+```
+
+`direnv` is also installed and activated from `config/shell/.zshrc`.
+To allow a project-local `.envrc`, run:
+
+```sh
+direnv allow
 ```
 
 Terminal navigation helpers:
