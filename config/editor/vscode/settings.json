@@ -349,6 +349,17 @@
       "commands": [
         "settings.cycle.enhanceComment"
       ]
+    },
+    /* Toggle ayu dark/light theme */
+    {
+      "before": [
+        "<leader>",
+        "<leader>",
+        "t"
+      ],
+      "commands": [
+        "settings.cycle.theme"
+      ]
     }
   ],
   /**
@@ -406,6 +417,36 @@
         },
         {
           "editor.tokenColorCustomizations": { /* do nathing */}
+        }
+      ]
+    },
+    /* Toggle ayu theme */
+    {
+      "id": "theme",
+      "values": [
+        {
+          "workbench.colorTheme": "Ayu Dark",
+          "apc.electron": {
+            "backgroundColor": "rgba(15, 20, 25, 0.86)",
+            "frame": false,
+            "transparent": true,
+            "titleBarStyle": "hiddenInset",
+            "vibrancy": "ultra-dark",
+            "opacity": 0.75,
+            "visualEffectState": "active"
+          }
+        },
+        {
+          "workbench.colorTheme": "Ayu Light",
+          "apc.electron": {
+            "backgroundColor": "rgba(252, 252, 252, 0.88)",
+            "frame": false,
+            "transparent": true,
+            "titleBarStyle": "hiddenInset",
+            "vibrancy": "light",
+            "opacity": 0.88,
+            "visualEffectState": "active"
+          }
         }
       ]
     }
@@ -507,13 +548,13 @@
   "update.showReleaseNotes": false,
   "git.openRepositoryInParentFolders": "never",
   "apc.electron": {
-    "backgroundColor": "rgba(40, 42, 54, 0.8)", // Set this to desired bg color
+    "backgroundColor": "rgba(15, 20, 25, 0.86)", // Set this to desired bg color
     "frame": false,
     "transparent": true,
     "titleBarStyle": "hiddenInset",
     "vibrancy": "ultra-dark",
     "opacity": 0.75, // Range: 0-1 (To go fully transparent, set it to 0)
-    "visualEffectState": "active",
+    "visualEffectState": "active"
   },
   "apc.listRow": {
     "height": 24,
@@ -523,7 +564,7 @@
   "workbench.editor.editorActionsLocation": "titleBar",
   "apc.font.family": "Geist Mono",
   "update.mode": "manual",
-  "workbench.colorTheme": "FireFly Pro Midnight",
+  "workbench.colorTheme": "Ayu Dark",
   "diffEditor.ignoreTrimWhitespace": true,
   "workbench.iconTheme": "vscode-icons",
   "editor.formatOnSave": true,
@@ -533,5 +574,7 @@
     }
   ],
   "window.titleBarStyle": "custom",
-  "docker.extension.enableComposeLanguageServer": false
+  "docker.extension.enableComposeLanguageServer": false,
+  "workbench.preferredDarkColorTheme": "Ayu Dark",
+  "workbench.preferredLightColorTheme": "Ayu Light"
 }
