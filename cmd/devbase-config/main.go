@@ -29,6 +29,7 @@ type target struct {
 var targets = []target{
 	{"git-common", "repo", "switch", "Shared Git module"},
 	{"git-local", "local", "auto", "Machine-specific Git identity and credentials"},
+	{"help-note", "local", "auto", "Machine-specific tmux help note"},
 	{"packages-local", "local", "switch", "Machine-specific extra Nix packages"},
 	{"shell-common", "repo", "switch", "Shared zsh configuration"},
 	{"shell-local", "local", "auto", "Machine-specific shell initialization"},
@@ -55,6 +56,12 @@ func run(args []string) error {
 	switch args[0] {
 	case "list":
 		return cmdList()
+	case "note":
+		return cmdNote()
+	case "note-ui":
+		return cmdNoteUI()
+	case "sync-note":
+		return cmdSyncNote()
 	case "ui":
 		return runTUI()
 	case "pull":
@@ -108,6 +115,9 @@ func run(args []string) error {
 func printUsage() {
 	fmt.Println(`Usage:
   devbase-config list
+  devbase-config note
+  devbase-config note-ui
+  devbase-config sync-note
   devbase-config ui
   devbase-config pull
   devbase-config switch [--backup]
@@ -367,6 +377,14 @@ func resolvePath(name string, prepare bool) (string, error) {
 		target := filepath.Join(userHomeDir(), ".config/devbase/git/local.gitconfig")
 		if prepare {
 			if err := ensureFile(target, gitLocalTemplate()); err != nil {
+				return "", err
+			}
+		}
+		return target, nil
+	case "help-note":
+		target := filepath.Join(userHomeDir(), ".config/devbase/help-note.md")
+		if prepare {
+			if err := ensureFile(target, helpNoteTemplate()); err != nil {
 				return "", err
 			}
 		}

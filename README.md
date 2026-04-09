@@ -84,13 +84,18 @@ Use the helper CLI to edit common and local config files:
 
 ```sh
 devbase-config list
+devbase-config note
 devbase-config ui
 devbase-config edit git-local
+devbase-config edit help-note
 devbase-config edit shell-local
 devbase-config edit tmux
 ```
 
 `devbase-config ui` opens a full-screen terminal UI for browsing targets and running common actions.
+
+`devbase-config note` prints a generated help note built from tmux and shell comments plus your personal note in `~/.config/devbase/help-note.md`.
+Edit the personal note with `devbase-config edit help-note`.
 
 For VS Code base config deployment:
 
@@ -204,6 +209,8 @@ Terminal navigation helpers:
 - `ff`: open a file and directory picker with `fzf`; files open in `$EDITOR`, directories change the current shell directory
 - `cdf`: open a directory picker with `fzf` and `cd` into the result
 - `cgr`: open a `ghq` repository picker and `cd` into the selected local repo
+
+Inside tmux, press `<Prefix> g` to open your personal help note in a popup window. With the current config, `<Prefix>` is `Ctrl-j`.
 
 ## VS Code Configuration
 

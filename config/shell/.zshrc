@@ -27,6 +27,7 @@ fi
 export VISUAL=vim
 export EDITOR=vim
 
+# Pick a file or directory with fzf.
 function ff() {
   local entry
   entry="$(
@@ -50,6 +51,7 @@ function ff() {
   "$EDITOR" "$entry"
 }
 
+# Pick a directory with fzf and cd into it.
 function cdf() {
   local dir
   dir="$(
@@ -63,6 +65,7 @@ function cdf() {
   cd -- "$dir"
 }
 
+# Pick a ghq-managed repository and cd into it.
 function cgr() {
   local root selected repo_path
   root="$(ghq root)" || return

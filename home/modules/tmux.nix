@@ -4,7 +4,7 @@
     enable = true;
     shell = "${pkgs.zsh}/bin/zsh";
     terminal = "screen-256color";
-    sensibleOnTop = false;
+    sensibleOnTop = true;
     plugins = with pkgs.tmuxPlugins; [
       {
         plugin = resurrect;
