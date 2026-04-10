@@ -60,6 +60,10 @@ func TestParseShellFunctions(t *testing.T) {
 function cgr() {
 }
 
+# Internal helper
+function __devbase_select_history() {
+}
+
 # Pick a directory
 cdf() {
 }

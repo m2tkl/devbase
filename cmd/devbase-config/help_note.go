@@ -324,6 +324,10 @@ func parseShellFunctions(content string) []shellFunction {
 
 		name, ok := parseShellFunctionName(line)
 		if ok {
+			if strings.HasPrefix(name, "__") {
+				comments = nil
+				continue
+			}
 			functions = append(functions, shellFunction{
 				Name:        name,
 				Description: strings.Join(comments, " "),

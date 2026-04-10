@@ -204,13 +204,19 @@ To allow a project-local `.envrc`, run:
 direnv allow
 ```
 
+Shell history is configured to append incrementally and share across sessions, so commands remain available after starting a new login shell such as `exec -l zsh`.
+
 Terminal navigation helpers:
 
 - `ff`: open a file and directory picker with `fzf`; files open in `$EDITOR`, directories change the current shell directory
 - `cdf`: open a directory picker with `fzf` and `cd` into the result
 - `cgr`: open a `ghq` repository picker and `cd` into the selected local repo
+- `cdg`: open a directory picker rooted at the current Git repository and `cd` into the result
+- `fbr`: fuzzy-pick a local Git branch and check it out
 - `fh`: fuzzy-pick a command from shell history, edit it if needed, and run it
 - `fhr`: fuzzy-pick a command from shell history and run it immediately
+- `ghi`: fuzzy-pick a GitHub issue from `gh issue list` and show it in the terminal
+- `ghiw`: fuzzy-pick a GitHub issue from `gh issue list` and open it in the browser
 - `Ctrl-r`: fuzzy-pick a command from shell history and load it into the prompt
 
 Inside tmux, press `<Prefix> g` to open your personal help note in a popup window. With the current config, `<Prefix>` is `Ctrl-j`.

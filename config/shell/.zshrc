@@ -27,6 +27,18 @@ fi
 export VISUAL=vim
 export EDITOR=vim
 
+export HISTFILE="$HOME/.zsh_history"
+export HISTSIZE=50000
+export SAVEHIST=50000
+
+setopt APPEND_HISTORY
+setopt EXTENDED_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+
 function __devbase_history_candidates() {
   fc -rl 1 | sed -E 's/^[[:space:]]*[0-9]+[[:space:]]+//'
 }
@@ -97,6 +109,65 @@ function cgr() {
   repo_path="${selected#*$'\t'}"
   [ -n "$repo_path" ] || return
   cd -- "$repo_path"
+}
+
+function cdg() {
+  local top_dir dir
+  top_dir="$(git rev-parse --show-toplevel 2>/dev/null)" || {
+    echo "Not in a Git repository."
+    return 1
+  }
+  dir="$(
+    cd "$top_dir" || return 1
+    fd --type d --hidden --exclude .git . 2>/dev/null | \
+      fzf --height=80% --layout=reverse --border \
+        --prompt='git-dir> '
+  )" || return
+  [ -n "$dir" ] || return
+  cd -- "$top_dir/$dir"
+}
+
+function fbr() {
+  local branch
+  branch="$(
+    git for-each-ref \
+      --format='%(if)%(HEAD)%(then)*%(else) %(end)%(refname:short)\t%(upstream:short)\t%(subject)' \
+      refs/heads | \
+      fzf --height=80% --layout=reverse --border \
+        --prompt='branch> ' \
+        --delimiter='\t' \
+        --with-nth=1,2,3
+  )" || return
+  [ -n "$branch" ] || return
+  git checkout "${${branch%%$'\t'*}#?}"
+}
+
+function ghi() {
+  local issue number
+  issue="$(
+    gh issue list | \
+      fzf --height=80% --layout=reverse --border \
+        --prompt='issue> ' \
+        --no-multi
+  )" || return
+  [ -n "$issue" ] || return
+  number="${issue%%[[:space:]]*}"
+  number="${number#'#'}"
+  gh issue view "$number"
+}
+
+function ghiw() {
+  local issue number
+  issue="$(
+    gh issue list | \
+      fzf --height=80% --layout=reverse --border \
+        --prompt='issue> ' \
+        --no-multi
+  )" || return
+  [ -n "$issue" ] || return
+  number="${issue%%[[:space:]]*}"
+  number="${number#'#'}"
+  gh issue view --web "$number"
 }
 
 function fh() {
