@@ -8,7 +8,7 @@ This documents the Herdr keymap managed by `config/herdr/config.toml`.
 | --- | --- | --- |
 | `Ctrl-j` | `Ctrl-j` | Prefix key. |
 | `<Prefix> r` | `<Prefix> r` | Reload Herdr config. |
-| `<Prefix> g` | `<Prefix> g` | Opens `devbase-config note-ui` in a temporary pane, not a tmux popup. |
+| `<Prefix> g` | `<Prefix> g` | Opens `dv note-ui` in a temporary pane, not a tmux popup. |
 | `<Prefix> s` | `<Prefix> s` | Split down, matching `split-window -v`; Herdr action is `split_horizontal`. |
 | `<Prefix> v` | `<Prefix> v` | Split right, matching `split-window -h`; Herdr action is `split_vertical`. |
 | `<Prefix> h/j/k/l` | `<Prefix> h/j/k/l` | Focus pane by direction. |

@@ -25,17 +25,17 @@
         config.allowUnfree = true;
       };
 
-      mkDevbaseConfig = system:
+      mkDv = system:
         let
           pkgs = mkPkgs system;
           src = ./.;
         in
         pkgs.buildGoModule {
-          pname = "devbase-config";
+          pname = "dv";
           version = "0.1.0";
           inherit src;
           modRoot = ".";
-          subPackages = [ "cmd/devbase-config" ];
+          subPackages = [ "cmd/dv" ];
           vendorHash = "sha256-vj6i7Uc5LXnOF3Gi/GKy+FQ/I6eSyt2kKgZl8C5u2MM=";
           ldflags = [
             "-X"
@@ -56,7 +56,7 @@
                 inherit username homeDirectory stateVersion;
               };
               home.packages = [
-                self.packages.${system}.devbase-config
+                self.packages.${system}.dv
                 herdr.packages.${system}.default
               ];
             }
@@ -67,8 +67,8 @@
         };
     in {
       packages = {
-        aarch64-darwin.devbase-config = mkDevbaseConfig "aarch64-darwin";
-        x86_64-linux.devbase-config = mkDevbaseConfig "x86_64-linux";
+        aarch64-darwin.dv = mkDv "aarch64-darwin";
+        x86_64-linux.dv = mkDv "x86_64-linux";
       };
 
       homeConfigurations = {

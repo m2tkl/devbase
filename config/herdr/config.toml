@@ -36,7 +36,7 @@ settings = "prefix+shift+s"
 [[keys.command]]
 key = "prefix+g"
 type = "pane"
-command = "if command -v devbase-config >/dev/null 2>&1; then exec devbase-config note-ui; else printf 'devbase-config not found'; sleep 2; fi"
+command = "if command -v dv >/dev/null 2>&1; then exec dv note-ui; else printf 'dv not found'; sleep 2; fi"
 description = "open personal help note"
 
 [[keys.command]]

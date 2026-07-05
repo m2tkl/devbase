@@ -17,6 +17,9 @@ import (
 )
 
 var nixSourceRoot string
+
+const commandName = "dv"
+
 const repoRootConfigPath = ".config/devbase/repo-root"
 
 type target struct {
@@ -72,7 +75,7 @@ func run(args []string) error {
 		return runHomeManager("build", args[1:])
 	case "path":
 		if len(args) != 2 {
-			return errors.New("usage: devbase-config path <target>")
+			return errors.New("usage: dv path <target>")
 		}
 		path, err := resolvePath(args[1], false)
 		if err != nil {
@@ -82,7 +85,7 @@ func run(args []string) error {
 		return nil
 	case "edit":
 		if len(args) != 2 {
-			return errors.New("usage: devbase-config edit <target>")
+			return errors.New("usage: dv edit <target>")
 		}
 		path, err := resolvePath(args[1], true)
 		if err != nil {
@@ -91,15 +94,15 @@ func run(args []string) error {
 		return openEditor(path)
 	case "apply":
 		if len(args) < 2 {
-			return errors.New("usage: devbase-config apply <target> [--backup]")
+			return errors.New("usage: dv apply <target> [--backup]")
 		}
 		backup := false
 		if len(args) > 3 {
-			return errors.New("usage: devbase-config apply <target> [--backup]")
+			return errors.New("usage: dv apply <target> [--backup]")
 		}
 		if len(args) == 3 {
 			if args[2] != "--backup" {
-				return errors.New("usage: devbase-config apply <target> [--backup]")
+				return errors.New("usage: dv apply <target> [--backup]")
 			}
 			backup = true
 		}
@@ -113,18 +116,19 @@ func run(args []string) error {
 }
 
 func printUsage() {
-	fmt.Println(`Usage:
-  devbase-config list
-  devbase-config note
-  devbase-config note-ui
-  devbase-config sync-note
-  devbase-config ui
-  devbase-config pull
-  devbase-config switch [--backup]
-  devbase-config build
-  devbase-config path <target>
-  devbase-config edit <target>
-  devbase-config apply <target> [--backup]`)
+	fmt.Printf(`Usage:
+  %[1]s list
+  %[1]s note
+  %[1]s note-ui
+  %[1]s sync-note
+  %[1]s ui
+  %[1]s pull
+  %[1]s switch [--backup]
+  %[1]s build
+  %[1]s path <target>
+  %[1]s edit <target>
+  %[1]s apply <target> [--backup]
+`, commandName)
 }
 
 func cmdList() error {
@@ -295,7 +299,7 @@ func (m uiModel) View() string {
 
 	view := lipgloss.JoinVertical(
 		lipgloss.Left,
-		headerStyle.Render("devbase-config ui"),
+		headerStyle.Render(commandName+" ui"),
 		top,
 		list,
 		help,

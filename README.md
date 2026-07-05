@@ -22,7 +22,7 @@ devbase is my developer machine baseline managed with Nix and Home Manager.
 If direct GitHub flake access works in your network environment, bootstrap with:
 
 ```sh
-nix run github:m2tkl/devbase#devbase-config -- switch --backup
+nix run github:m2tkl/devbase#dv -- switch --backup
 ```
 
 If `github:m2tkl/devbase` is blocked, a local checkout can still be useful once your environment is able to access the required flake inputs:
@@ -51,19 +51,19 @@ Note:
 After the first install, apply the current machine profile with:
 
 ```sh
-devbase-config switch --backup
+dv switch --backup
 ```
 
 Update the local devbase checkout:
 
 ```sh
-devbase-config pull
+dv pull
 ```
 
 Build without activating:
 
 ```sh
-devbase-config build
+dv build
 ```
 
 ### Linux Notes
@@ -83,27 +83,27 @@ If your environment relies on `/etc/profile.d/*.sh` for proxy settings, re-login
 Use the helper CLI to edit common and local config files:
 
 ```sh
-devbase-config list
-devbase-config note
-devbase-config ui
-devbase-config edit git-local
-devbase-config edit help-note
-devbase-config edit shell-local
-devbase-config edit tmux
+dv list
+dv note
+dv ui
+dv edit git-local
+dv edit help-note
+dv edit shell-local
+dv edit tmux
 ```
 
-`devbase-config ui` opens a full-screen terminal UI for browsing targets and running common actions.
+`dv ui` opens a full-screen terminal UI for browsing targets and running common actions.
 
-`devbase-config note` prints a generated help note built from tmux and shell comments plus your personal note in `~/.config/devbase/help-note.md`.
-Edit the personal note with `devbase-config edit help-note`.
+`dv note` prints a generated help note built from tmux and shell comments plus your personal note in `~/.config/devbase/help-note.md`.
+Edit the personal note with `dv edit help-note`.
 
 For VS Code base config deployment:
 
 ```sh
-devbase-config apply vscode --backup
+dv apply vscode --backup
 ```
 
-`devbase-config apply <target>` uses each target's apply mode:
+`dv apply <target>` uses each target's apply mode:
 
 - `switch`: runs Home Manager switch
 - `manual`: runs the target-specific manual installer
@@ -239,7 +239,7 @@ Target location:
 To merge the repo base config into the current machine's VS Code config, run:
 
 ```sh
-devbase-config apply vscode
+dv apply vscode
 ```
 
 Merge behavior:
@@ -250,7 +250,7 @@ Merge behavior:
 To keep a backup of the current files before writing the merged result:
 
 ```sh
-devbase-config apply vscode --backup
+dv apply vscode --backup
 ```
 
 ## Notes
