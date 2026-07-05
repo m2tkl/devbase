@@ -13,13 +13,13 @@ prefix = "ctrl+j"
 reload_config = "prefix+r"
 workspace_picker = ["alt+a", "alt+w"]
 
-new_workspace = "ctrl+alt+c"
-previous_workspace = "ctrl+alt+h"
-next_workspace = "ctrl+alt+l"
+new_workspace = "prefix+shift+c"
+previous_workspace = "prefix+shift+p"
+next_workspace = "prefix+shift+n"
 
 new_tab = "prefix+c"
-next_tab = "prefix+tab"
-previous_tab = "prefix+shift+tab"
+previous_tab = "prefix+p"
+next_tab = "prefix+n"
 
 focus_pane_left = "prefix+h"
 focus_pane_down = "prefix+j"

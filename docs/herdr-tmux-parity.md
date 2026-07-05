@@ -14,11 +14,10 @@ This documents the Herdr keymap managed by `config/herdr/config.toml`.
 | `<Prefix> h/j/k/l` | `<Prefix> h/j/k/l` | Focus pane by direction. |
 | `<Prefix> H/J/K/L` | `<Prefix> H/J/K/L` | Resize pane by direction via `herdr pane resize`. |
 | `<Prefix> c` | `<Prefix> c` | New tab, closest Herdr equivalent to a tmux window. |
-| `<Prefix> Tab` | `<Prefix> Tab` | Next tab. |
-| `<Prefix> Shift-Tab` | `<Prefix> Shift-Tab` | Previous tab. |
+| `<Prefix> n/p` | `<Prefix> n/p` | Next/previous tab. |
 | `Alt-a` / `Alt-w` | `Alt-a` / `Alt-w` | Opens Herdr workspace picker. |
-| `Ctrl-Alt-c` | `Ctrl-Alt-c` | New workspace, closest Herdr equivalent to a new tmux session. |
-| `Ctrl-Alt-h/l` | `Ctrl-Alt-h/l` | Previous/next workspace. |
+| `<Prefix> Shift-c` | `<Prefix> Shift-c` | New workspace, closest Herdr equivalent to a new tmux session. |
+| `<Prefix> Shift-p/n` | `<Prefix> Shift-p/n` | Previous/next workspace. |
 
 ## Not Fully Matched
 
