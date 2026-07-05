@@ -7,9 +7,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    herdr = {
+      url = "github:ogulcancelik/herdr/v0.7.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, home-manager, nixpkgs, ... }:
+  outputs = { self, herdr, home-manager, nixpkgs, ... }:
     let
       envOr =
         name: fallback:
@@ -51,7 +55,10 @@
               home = {
                 inherit username homeDirectory stateVersion;
               };
-              home.packages = [ self.packages.${system}.devbase-config ];
+              home.packages = [
+                self.packages.${system}.devbase-config
+                herdr.packages.${system}.default
+              ];
             }
             (if system == "aarch64-darwin" || system == "x86_64-darwin"
              then ./home/darwin.nix

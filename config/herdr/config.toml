@@ -1,0 +1,74 @@
+# devbase Herdr configuration
+
+onboarding = false
+
+[terminal]
+default_shell = "zsh"
+shell_mode = "auto"
+new_cwd = "follow"
+
+[keys]
+prefix = "ctrl+j"
+
+reload_config = "prefix+r"
+workspace_picker = ["alt+a", "alt+w"]
+
+new_workspace = "ctrl+alt+c"
+previous_workspace = "ctrl+alt+h"
+next_workspace = "ctrl+alt+l"
+
+new_tab = "prefix+c"
+next_tab = "prefix+tab"
+previous_tab = "prefix+shift+tab"
+
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+split_horizontal = "prefix+s"
+split_vertical = "prefix+v"
+
+resize_mode = ""
+goto = ""
+settings = "prefix+shift+s"
+
+[[keys.command]]
+key = "prefix+g"
+type = "pane"
+command = "if command -v devbase-config >/dev/null 2>&1; then exec devbase-config note-ui; else printf 'devbase-config not found'; sleep 2; fi"
+description = "open personal help note"
+
+[[keys.command]]
+key = "prefix+shift+h"
+type = "shell"
+command = "\"${HERDR_BIN_PATH:-herdr}\" pane resize --direction left --amount 5 --current >/dev/null"
+description = "resize pane left"
+
+[[keys.command]]
+key = "prefix+shift+j"
+type = "shell"
+command = "\"${HERDR_BIN_PATH:-herdr}\" pane resize --direction down --amount 5 --current >/dev/null"
+description = "resize pane down"
+
+[[keys.command]]
+key = "prefix+shift+k"
+type = "shell"
+command = "\"${HERDR_BIN_PATH:-herdr}\" pane resize --direction up --amount 5 --current >/dev/null"
+description = "resize pane up"
+
+[[keys.command]]
+key = "prefix+shift+l"
+type = "shell"
+command = "\"${HERDR_BIN_PATH:-herdr}\" pane resize --direction right --amount 5 --current >/dev/null"
+description = "resize pane right"
+
+[ui]
+mouse_capture = true
+pane_borders = true
+pane_gaps = true
+prompt_new_tab_name = false
+accent = "#39bae6"
+
+[ui.sound]
+enabled = false
