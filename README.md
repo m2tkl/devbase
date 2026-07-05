@@ -83,6 +83,7 @@ If your environment relies on `/etc/profile.d/*.sh` for proxy settings, re-login
 Use the helper CLI to edit common and local config files:
 
 ```sh
+dv
 dv list
 dv note
 dv ui
@@ -92,7 +93,7 @@ dv edit shell-local
 dv edit tmux
 ```
 
-`dv ui` opens a full-screen terminal UI for browsing targets and running common actions.
+`dv` opens a full-screen terminal UI for browsing targets and running common actions. `dv ui` opens the same UI explicitly.
 
 `dv note` prints a generated help note built from tmux and shell comments plus your personal note in `~/.config/devbase/help-note.md`.
 Edit the personal note with `dv edit help-note`.

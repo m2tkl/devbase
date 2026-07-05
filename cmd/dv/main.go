@@ -51,9 +51,12 @@ func main() {
 }
 
 func run(args []string) error {
+	return runWithUI(args, runTUI)
+}
+
+func runWithUI(args []string, startUI func() error) error {
 	if len(args) == 0 {
-		printUsage()
-		return nil
+		return startUI()
 	}
 
 	switch args[0] {
@@ -108,26 +111,51 @@ func run(args []string) error {
 		}
 		return runApply(args[1], backup)
 	case "-h", "--help", "help":
-		printUsage()
+		printHelp()
 		return nil
 	default:
-		return fmt.Errorf("unknown command: %s", args[0])
+		return fmt.Errorf("unknown command: %s\nRun 'dv help' to see available commands.", args[0])
 	}
 }
 
-func printUsage() {
-	fmt.Printf(`Usage:
-  %[1]s list
-  %[1]s note
-  %[1]s note-ui
-  %[1]s sync-note
-  %[1]s ui
-  %[1]s pull
-  %[1]s switch [--backup]
-  %[1]s build
-  %[1]s path <target>
-  %[1]s edit <target>
-  %[1]s apply <target> [--backup]
+func printHelp() {
+	fmt.Print(helpText())
+}
+
+func helpText() string {
+	return fmt.Sprintf(`dv manages this machine's devbase Home Manager profile and local config files.
+
+Usage:
+  %[1]s                         Open the interactive UI
+  %[1]s <command> [args]
+
+Common:
+  %[1]s                         Browse targets and run actions interactively
+  %[1]s switch --backup         Apply the Home Manager profile with backups
+  %[1]s pull                    Update the local devbase checkout
+  %[1]s edit shell-local        Edit machine-specific shell config
+  %[1]s note                    Print the generated tmux/shell help note
+
+Commands:
+  ui                            Open the interactive UI
+  list                          List editable/applicable config targets
+  note                          Print the generated help note
+  note-ui                       Open the generated help note in a terminal UI
+  sync-note                     Regenerate the help note file
+  pull                          Git pull the devbase checkout
+  switch [--backup]             Run Home Manager switch for this machine
+  build                         Run Home Manager build without activating
+  path <target>                 Print the resolved path for a target
+  edit <target>                 Open a target in $EDITOR
+  apply <target> [--backup]     Apply one target using its apply mode
+  help                          Show this help
+
+Target apply modes:
+  switch                        Applies through Home Manager switch
+  manual                        Uses a target-specific installer
+  auto                          Local file is already the source of truth
+
+Run '%[1]s list' to see targets.
 `, commandName)
 }
 

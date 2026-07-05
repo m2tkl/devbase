@@ -1,9 +1,51 @@
 package main
 
 import (
+	"errors"
 	"reflect"
+	"strings"
 	"testing"
 )
+
+func TestRunWithNoArgsStartsUI(t *testing.T) {
+	started := false
+	err := runWithUI(nil, func() error {
+		started = true
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("runWithUI(nil) returned error: %v", err)
+	}
+	if !started {
+		t.Fatal("runWithUI(nil) did not start UI")
+	}
+}
+
+func TestRunWithNoArgsReturnsUIError(t *testing.T) {
+	want := errors.New("ui failed")
+	err := runWithUI(nil, func() error {
+		return want
+	})
+	if !errors.Is(err, want) {
+		t.Fatalf("runWithUI(nil) error = %v, want %v", err, want)
+	}
+}
+
+func TestHelpTextDescribesDefaultUIAndCommands(t *testing.T) {
+	help := helpText()
+	for _, want := range []string{
+		"Open the interactive UI",
+		"switch --backup",
+		"edit shell-local",
+		"Commands:",
+		"Target apply modes:",
+		"Run 'dv list' to see targets.",
+	} {
+		if !strings.Contains(help, want) {
+			t.Fatalf("helpText() missing %q in:\n%s", want, help)
+		}
+	}
+}
 
 func TestParseTmuxBindings(t *testing.T) {
 	content := `
